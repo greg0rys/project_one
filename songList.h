@@ -1,3 +1,4 @@
+#pragma once
 #include "song.h"
 
 class songList
@@ -9,7 +10,7 @@ public:
     void append(const song &);
     void editLikes(int likes, song &);
     void printList();
-    void printOrdered();
+    void printByArtist(const char *); // will take an artists name;
     songList & operator=(const songList &);
     friend ostream&operator<< (ostream &, const songList &);
 private:
