@@ -5,3 +5,4 @@ bool readFromFile(ifstream &);
 int main();
 void getInput(char *&);
 void endApplication();
+int menu();

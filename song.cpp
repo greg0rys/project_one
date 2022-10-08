@@ -70,6 +70,9 @@ void song::getArtist(char * artist) const
 {
     if(!artist)
         artist = new char[strlen(artistName) + 1];
+    else
+        delete []artist;
+        artist = new char[strlen(artistName) + 1];
     strcpy(artist, artistName);
 }
 
@@ -77,7 +80,15 @@ void song::getArtist(char * artist) const
 void song::getTitle(char * songTitle) const
 {
     if(!songTitle)
+    {
         songTitle = new char[strlen(title) + 1];
+    }
+    else
+    {
+        delete[]songTitle;
+        songTitle = new char[strlen(title) + 1];
+    }
+
     strcpy(songTitle, title);
 }
 

@@ -47,6 +47,129 @@ void songList::append(const song &aSong)
 }
 
 
+node * songList::getArtistAt(const char * artName)
+{
+    node * curr = index;
+    char * artistName = nullptr;
+    while(curr)
+    {
+        curr->data->getArtist(artistName);
+        if(strcmp(artistName,artName) == 0)
+        {
+            break;
+        }
+        curr = curr->next;
+    }
+
+    return curr;
+}
+
+
+node * songList::getSongAt(const char * songName)
+{
+    node * curr = index;
+    char * currentSongName = nullptr;
+
+    while(curr)
+    {
+        curr->data->getTitle(currentSongName);
+        if(strcmp(songName, currentSongName) == 0)
+        {
+            break;
+        }
+        curr = curr->next;
+    }
+}
+
+/*
+ * @param likes the number of likes the user would like to change too.
+ * @param name the name of the song the user wants to edit.
+ * @return success true if likes were updated false if else.
+ */
+bool songList::editLikes(int likes, const char * name)
+{
+    node * nodeToEdit = getSongAt(name);
+    song songToEdit;
+    bool success = false;
+
+    if(nodeToEdit)
+    {
+        songToEdit = *(nodeToEdit->data);
+        songToEdit.setNumberOfLikes(likes);
+        success = true;
+    }
+
+    return success;
+}
+
+
+void songList::printList()
+{
+    if(!isEmpty())
+        cout << "The list is empty!" << endl;
+    else
+        cout << this;
+}
+
+
+void songList::printByArtist(const char * artName)
+{
+    songList sortedList;
+    node * curr = index;
+    char * currentSongName = nullptr;
+
+    while(curr)
+    {
+        curr->data->getArtist(currentSongName);
+        if(strcmp(currentSongName, artName) == 0)
+        {
+            insertSorted(*curr->data, sortedList);
+        }
+
+        curr = curr->next;
+    }
+
+    cout << sortedList << endl;
+
+}
+
+
+bool songList::isEmpty()
+{
+    return (index != nullptr);
+}
+
+
+void songList::insertSorted(const song & aSong, songList & aList)
+{
+    node * curr = aList.index;
+    node * newNode = nullptr;
+    if(!aList.index)
+    {
+        aList.index = new node(aSong);
+
+    }
+    while(curr && curr->data->getLikes() < aSong.getLikes())
+    {
+        curr = curr->next;
+    }
+
+    if(!curr)
+    {
+        newNode = new node(aSong);
+        aList.tail->next = newNode;
+        newNode->prev = tail;
+        aList.tail = newNode;
+    }
+    else
+    {
+        newNode = new node(aSong);
+        newNode->prev = curr;
+        newNode->next = curr->next;
+    }
+}
+
+
 songList & songList::operator=(const songList &aList)
 {
     if(this == &aList)
@@ -63,14 +186,14 @@ songList & songList::operator=(const songList &aList)
 
     node * newNode = new node(*aList.index->data);
     index = tail = newNode;
-    node * sourceNext = sourceNext.index->next;
+    node * sourceNext = sourceNext->next;
     node * newList = index;
 
     while(sourceNext)
     {
         newNode = new node(*sourceNext->data);
-        newList->next = newnode;
-        newnode->prev = newList;
+        newList->next = newNode;
+        newNode->prev = newList;
         sourceNext = sourceNext->next;
         newList = newList->next;
 
@@ -79,4 +202,26 @@ songList & songList::operator=(const songList &aList)
     tail = newList;
 
     return *this;
+}
+
+
+ ostream& operator<<(ostream & out, const songList & aList)
+{
+    char * artistName = nullptr;
+    char * songTitle = nullptr;
+    songList::node * curr = aList.index;
+
+    while(curr)
+    {
+        curr->data->getArtist(artistName);
+        curr->data->getTitle(songTitle);
+
+        out << artistName <<"\t" << songTitle << "\t"
+            << *(curr->data->getLikes()) << "\t" <<
+            *(curr->data->getLength()) << endl;
+
+        curr = curr->next;
+    }
+
+    return out;
 }

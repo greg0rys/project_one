@@ -8,9 +8,11 @@ public:
     songList(const songList &);
     ~songList();
     void append(const song &);
-    void editLikes(int likes, song &);
+    bool editLikes(int likes, song &);
     void printList();
     void printByArtist(const char *); // will take an artists name;
+    bool isEmpty();
+    void insertSorted(const song &, songList &);
     songList & operator=(const songList &);
     friend ostream&operator<< (ostream &, const songList &);
 private:
@@ -45,6 +47,9 @@ private:
     };
 
     void destroy();
+    node * getArtistAt(const char *);
+    node * getSongAt(const char *);
+
 
 	node * index;
 	node * tail;

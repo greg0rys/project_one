@@ -1,2 +1,4 @@
 .idea/
 logins.txt
+CMakeLists.txt
+cmake-build-debug
