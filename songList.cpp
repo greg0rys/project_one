@@ -64,7 +64,8 @@ node * songList::getArtistAt(const char * artName)
     return curr;
 }
 
-
+// these may need to be defined in the .h file to avoid this error of no
+// type found for *node.
 node * songList::getSongAt(const char * songName)
 {
     node * curr = index;
