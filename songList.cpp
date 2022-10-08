@@ -17,24 +17,24 @@ songList::~songList()
 
 void songList::destroy()
 {
-    node * curr = head;
+    node * curr = index;
     while(curr)
     {
-        head = curr->next;
-        delete head;
-        curr = head;
+        index = curr->next;
+        delete index;
+        curr = index;
     }
     size = 0;
 }
 
 void songList::append(const song &aSong)
 {
-    node * newNode = new Node(aSong);
+    node * newNode = new node(aSong);
 
-    if(!head)
+    if(!index)
     {
-        head = newNode;
-        head->next = nullptr;
+        index = newNode;
+        index->next = nullptr;
     }
     else
     {
@@ -47,7 +47,7 @@ void songList::append(const song &aSong)
 }
 
 
-list & songList::operator=(const songList &aList)
+songList & songList::operator=(const songList &aList)
 {
     if(this == &aList)
         return *this;

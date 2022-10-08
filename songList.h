@@ -16,7 +16,8 @@ private:
     struct node
     {
         song * data;
-        node * next,prev;
+        node * next;
+		node * prev;
 
 
         node()
@@ -44,6 +45,7 @@ private:
 
     void destroy();
 
-    node * index, tail;
+	node * index;
+	node * tail;
     int size;
 };

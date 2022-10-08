@@ -4,43 +4,90 @@ song::song(): artistName(nullptr), title(nullptr), length(0.00), numOfLikes(0.00
 {
 }
 
-song::song(const song &aCopy)
+song::song(const song &aCopy):artistName(nullptr), title(nullptr), length(0.00), numOfLikes(0.00)
 {
-	artistName = nullptr;
-	title = nullptr;
 	*this = aCopy;
 }
 
 song & song::operator=(const song &aCopy)
 {
-    if(this == source)
+    if(this == &source)
     {
         return *this;
     }
 
-    if(this->artistName && this->title)
+    delete []artistName;
+    delete []title;
+
+    if(!aCopy.title)
     {
-        delete []artistName;
-        delete []title;
+        title = nullptr;
     }
-    else if(this->artistName)
+    else if(!aCopy.artistName)
     {
-        delete []artistName;
+        artistName = nullptr;
     }
     else
     {
-        delete []title;
+        setArtist(aCopy.artistName);
+        setTitle(aCopy.title);
+        setLength(aCopy.length);
+        setNumberOfLikes(aCopy.numOfLikes);
     }
-	if(aCopy.artistName && aCopy.title)
-	{
-		char * artist = new char[aCopy.getArtistLength() + 1];
-        char * title = new char[aCopy.getTitleLength() + 1];
-        strcpy(artist, aCopy.artistName);
-        strcpy(title,aCopy.title);
-	}
-    else if(aCopy.artistName && !aCopy.title)
-    {
-        char * artist
-    }
+    return *this;
+}
+
+void song::setArtist(const char * name)
+{
+    if(artistName)
+        delete []artistName;
+    artistName = new char[strlen(name) + 1];
+    strcpy(artistName, name);
+}
+
+
+void song::setTitle(const char * title)
+{
+    if(this->title)
+        delete []this->title;
+    this->title = new char(strlen(title) + 1);
+    strcpy(this->title,title);
+}
+
+void song::setLength(const float songLength)
+{
+    length = songLength;
+}
+
+
+void song::setNumberOfLikes(const double likes)
+{
+    numOfLikes = likes;
+}
+
+
+void song::getArtist(char * artist) const
+{
+    if(!artist)
+        artist = new char[strlen(artistName) + 1];
+    strcpy(artist, artistName);
+}
+
+
+void song::getTitle(char * songTitle) const
+{
+    if(!songTitle)
+        songTitle = new char[strlen(title) + 1];
+    strcpy(songTitle, title);
+}
+
+float song::getLength() const
+{
+    return length;
+}
+
+double song::getLikes() const
+{
+    return numOfLikes;
 }
 
