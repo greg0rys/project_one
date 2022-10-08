@@ -171,6 +171,13 @@ void songList::insertSorted(const song & aSong, songList & aList)
 }
 
 
+void songList::loadFromFile(const char * filename)
+{
+    ifstream file;
+    song currentSong;
+
+}
+
 songList & songList::operator=(const songList &aList)
 {
     if(this == &aList)

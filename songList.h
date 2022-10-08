@@ -13,6 +13,7 @@ public:
     void printByArtist(const char *); // will take an artists name;
     bool isEmpty();
     void insertSorted(const song &, songList &);
+    void loadFromFile(const char *);
     songList & operator=(const songList &);
     friend ostream&operator<< (ostream &, const songList &);
 private:
