@@ -2,9 +2,48 @@
 
 
 
-void getInput(char *& chars)
-{
-    // do dynamic grabbing here.
+void getInput(char *& chars) {
+    char *input = nullptr;
+    char *temp = nullptr;
+    int wordSize = 0;
+
+    while (cin.good() && cin.peek() != EOF) {
+        char letter = cin.get();
+
+        if (letter == '\n') {
+            break;
+        }
+
+        if (!input) {
+            input = new char[2];
+            input[0] = letter;
+            input[1] = '\0';
+            wordSize = 1;
+        } else {
+            wordSize = strlen(input);
+            // +2 so we can get the letter plus have enough space to append
+            // cstrings null node terminator to the end.
+            temp = new char[wordSize + 2]{0};
+            strcpy(temp, input);
+            delete[]input;
+            input = temp;
+            input[wordSize] = letter;
+            input[wordSize + 1] = '\0';
+        }
+
+    }
+
+    if (!chars) {
+        chars = new char[strlen(input) + 1];
+
+    } else {
+        delete[]chars;
+        chars = new char[strlen(temp) + 1];
+    }
+    // copy the users input into the passed in pointer.
+    strcpy(chars, input);
+    // get rid of our dynamic input pointer.
+    delete[]input;
 }
 
 int menu()

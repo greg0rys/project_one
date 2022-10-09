@@ -108,7 +108,7 @@ bool songList::editLikes(int likes, const char * name)
 
 void songList::printList()
 {
-    if(!isEmpty())
+    if(isEmpty())
         cout << "The list is empty!" << endl;
     else
         cout << *this;
