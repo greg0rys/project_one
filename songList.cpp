@@ -80,6 +80,8 @@ node * songList::getSongAt(const char * songName)
         }
         curr = curr->next;
     }
+
+    return curr;
 }
 
 /*
@@ -109,7 +111,7 @@ void songList::printList()
     if(!isEmpty())
         cout << "The list is empty!" << endl;
     else
-        cout << this;
+        cout << *this;
 }
 
 

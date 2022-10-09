@@ -17,23 +17,29 @@ int menu(songList &list)
     cout << "Enter a menu option: ";
     cin.getline(&option, 101);
 
-    switch(option)
+    while(option != '0')
     {
-        case 1:
-            unsortedList.printList();
-            break;
-        case 2:
-            cout << "Enter an artist name to display: ";
-            getInput(artistName);
-            unsortedList.printByArtist(artistName);
-            delete []artistName;
-            break;
-        case 3:
-            newSong = getSongInfo();
-            unsortedList.append(newSong);
-            break;
-        default:
-            cout << "invalid input, please try again " << endl;
+        switch(option)
+        {
+            case 1:
+                unsortedList.printList();
+                break;
+            case 2:
+                cout << "Enter an artist name to display: ";
+                getInput(artistName);
+                unsortedList.printByArtist(artistName);
+                delete []artistName;
+                break;
+            case 3:
+                newSong = getSongInfo();
+                unsortedList.append(newSong);
+                break;
+            case 4:
+                option = '0';
+            default:
+                cout << "invalid input, please try again " << endl;
+        }
+
     }
 }
 
