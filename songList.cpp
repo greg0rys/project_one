@@ -47,7 +47,7 @@ void songList::append(const song &aSong)
 }
 
 
-node * songList::getArtistAt(const char * artName)
+songList::node* songList::getArtistAt(const char * artName)
 {
     node * curr = index;
     char * artistName = nullptr;
@@ -66,7 +66,7 @@ node * songList::getArtistAt(const char * artName)
 
 // these may need to be defined in the .h file to avoid this error of no
 // type found for *node.
-node * songList::getSongAt(const char * songName)
+songList::node* songList::getSongAt(const char * songName)
 {
     node * curr = index;
     char * currentSongName = nullptr;
@@ -227,8 +227,8 @@ songList & songList::operator=(const songList &aList)
         curr->data->getTitle(songTitle);
 
         out << artistName <<"\t" << songTitle << "\t"
-            << *(curr->data->getLikes()) << "\t" <<
-            *(curr->data->getLength()) << endl;
+            << curr->data->getLikes() << "\t" <<
+            curr->data->getLength() << endl;
 
         curr = curr->next;
     }

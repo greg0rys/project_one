@@ -7,18 +7,33 @@ void getInput(char *& chars)
     // do dynamic grabbing here.
 }
 
-int menu(songList &list)
+int menu()
 {
-    char option;
+    int option;
     char * artistName = nullptr;
     song newSong;
     songList unsortedList;
 
-    cout << "Enter a menu option: ";
-    cin.getline(&option, 101);
-
-    while(option != '0')
+    cout << "Menu: \n"
+         << "\t1. Print List \n"
+         << "\t2. Print Songs By an Artist \n"
+         << "\t3. Add a new song to the list \n"
+         << "\t4. Remove songs with less than a given number of likes \n"
+         << "\t5. Quit\n"
+         << endl << endl;
+    cout << "Enter an option: ";
+    cin >> option;
+    while(cin.fail())
     {
+        cin.clear();
+        cin.ignore(101,'\n');
+
+        cout << "ERR please enter the number of your menu choice: (EX 1 to print the list) " << endl;
+        cout << "Please enter a menu choice: ";
+        cin >> option;
+    }
+    cin.ignore(101,'\n');
+
         switch(option)
         {
             case 1:
@@ -40,7 +55,7 @@ int menu(songList &list)
                 cout << "invalid input, please try again " << endl;
         }
 
-    }
+    return option;
 }
 
 song getSongInfo()
@@ -87,7 +102,7 @@ song getSongInfo()
 int main()
 {
     cout << "Welcome to the song list database. " << endl;
-    while(menu() != 'Q')
+    while(menu() != 5)
     {
         menu();
     }
