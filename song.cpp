@@ -9,23 +9,48 @@ song::song(const song &aCopy):artistName(nullptr), title(nullptr), length(0.00),
 	*this = aCopy;
 }
 
+song::~song()
+{
+    if(artistName)
+        delete []artistName;
+    else if(title)
+        delete []title;
+    artistName = nullptr;
+    title = nullptr;
+}
+
 song & song::operator=(const song &aCopy)
 {
-    if(this == &source)
+    if(this == &aCopy)
     {
         return *this;
     }
 
-    delete []artistName;
-    delete []title;
+    if(artistName)
+        delete []artistName;
+    if(title)
+        delete []title;
 
-    if(!aCopy.title)
-    {
-        title = nullptr;
-    }
-    else if(!aCopy.artistName)
+    if(!aCopy.artistName && !aCopy.title)
     {
         artistName = nullptr;
+        title = nullptr;
+        setLength(aCopy.length);
+        setNumberOfLikes(aCopy.numOfLikes);
+    }
+    else if(!aCopy.artistName && aCopy.title)
+    {
+        artistName = nullptr;
+        setTitle(aCopy.title);
+        setLength(aCopy.length);
+        setNumberOfLikes(aCopy.numOfLikes);
+    }
+    else if(aCopy.artistName && !aCopy.title)
+    {
+        setArtist(aCopy.artistName);
+        title = nullptr;
+        setLength(aCopy.length);
+        setNumberOfLikes(aCopy.numOfLikes);
     }
     else
     {
@@ -54,13 +79,13 @@ void song::setTitle(const char * title)
     strcpy(this->title,title);
 }
 
-void song::setLength(const float songLength)
+void song::setLength(float songLength)
 {
     length = songLength;
 }
 
 
-void song::setNumberOfLikes(const double likes)
+void song::setNumberOfLikes(int likes)
 {
     numOfLikes = likes;
 }
@@ -97,7 +122,7 @@ float song::getLength() const
     return length;
 }
 
-double song::getLikes() const
+int song::getLikes() const
 {
     return numOfLikes;
 }

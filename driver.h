@@ -4,3 +4,4 @@ int main();
 void getInput(char *&);
 void endApplication();
 int menu(songList &);
+song getSongInfo();
