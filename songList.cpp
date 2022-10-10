@@ -31,6 +31,7 @@ void songList::append(const song &aSong)
 {
     node * newNode = new node(aSong);
 
+
     if(!index)
     {
         index = newNode;
@@ -218,19 +219,14 @@ songList & songList::operator=(const songList &aList)
 
  ostream& operator<<(ostream & out, const songList & aList)
 {
-    char * artistName = nullptr;
-    char * songTitle = nullptr;
-    songList::node * curr;
 
-    for(curr = aList.index; curr; curr->next)
+    songList::node * curr = aList.index;
+    while(curr)
     {
-        curr->data->getArtist(artistName);
-        curr->data->getTitle(songTitle);
-
-        out << artistName << " " << songTitle
-            << " " << curr->data->getLength() << " " << curr->data->getLikes()
-            << endl;
+        out << *(curr->data);
+        curr = curr->next;
     }
+
 
 
     return out;

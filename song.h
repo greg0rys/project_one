@@ -16,16 +16,19 @@ class song
 		song & operator=(const song &); // overloaded assignment operator
 		void setArtist(const char *);
 		void setTitle(const char *);
-		void setLength(float);
+		void setLength(int);
 		void setNumberOfLikes(int);
 		void getArtist(char *) const;
 		void getTitle(char *) const;
-		float getLength() const;
+		int getLength() const;
 		int getLikes() const;
-	private:
+       friend ostream&operator<< (ostream &, const song &);
+
+
+private:
 		char * artistName;
 		char * title;
-		float length;
+		int length;
 		int numOfLikes;
 
 };

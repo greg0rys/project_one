@@ -79,7 +79,7 @@ void song::setTitle(const char * title)
     strcpy(this->title,title);
 }
 
-void song::setLength(float songLength)
+void song::setLength(int songLength)
 {
     length = songLength;
 }
@@ -117,7 +117,7 @@ void song::getTitle(char * songTitle) const
     strcpy(songTitle, title);
 }
 
-float song::getLength() const
+int song::getLength() const
 {
     return length;
 }
@@ -125,5 +125,17 @@ float song::getLength() const
 int song::getLikes() const
 {
     return numOfLikes;
+}
+
+
+ostream& operator<<(ostream &out, const song &aSong)
+{
+    int mins = (aSong.length / 60);
+    int seconds = (aSong.length % 60) / 100;
+    out << aSong.artistName << " " << aSong.title
+        << " " << mins  << "m " << seconds << "s " << aSong.numOfLikes
+        << endl;
+
+    return out;
 }
 
