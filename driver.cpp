@@ -81,7 +81,7 @@ int menu()
         switch(option)
         {
             case 1:
-                unsortedList.printList();
+                unsortedList.printList(unsortedList);
                 break;
             case 2:
                 cout << "Enter an artist name to display: ";

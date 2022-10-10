@@ -34,7 +34,7 @@ void songList::append(const song &aSong)
     if(!index)
     {
         index = newNode;
-        index->next = nullptr;
+        tail = newNode;
     }
     else
     {
@@ -106,12 +106,13 @@ bool songList::editLikes(int likes, const char * name)
 }
 
 
-void songList::printList()
+void songList::printList(const songList &list)
 {
+
     if(isEmpty())
         cout << "The list is empty!" << endl;
     else
-        cout << *this;
+        cout << list;
 }
 
 
@@ -139,7 +140,7 @@ void songList::printByArtist(const char * artName)
 
 bool songList::isEmpty()
 {
-    return (index != nullptr);
+    return (index == nullptr);
 }
 
 
@@ -219,19 +220,18 @@ songList & songList::operator=(const songList &aList)
 {
     char * artistName = nullptr;
     char * songTitle = nullptr;
-    songList::node * curr = aList.index;
+    songList::node * curr;
 
-    while(curr)
+    for(curr = aList.index; curr; curr->next)
     {
         curr->data->getArtist(artistName);
         curr->data->getTitle(songTitle);
 
-        out << artistName <<"\t" << songTitle << "\t"
-            << curr->data->getLikes() << "\t" <<
-            curr->data->getLength() << endl;
-
-        curr = curr->next;
+        out << artistName << " " << songTitle
+            << " " << curr->data->getLength() << " " << curr->data->getLikes()
+            << endl;
     }
+
 
     return out;
 }

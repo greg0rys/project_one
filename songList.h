@@ -48,7 +48,7 @@ public:
     ~songList();
     void append(const song &);
     bool editLikes(int likes, const char *);
-    void printList();
+    void printList(const songList &);
     void printByArtist(const char *); // will take an artists name;
     bool isEmpty();
     void insertSorted(const song &, songList &);
