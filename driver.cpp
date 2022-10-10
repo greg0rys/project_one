@@ -33,25 +33,20 @@ void getInput(char *& chars) {
 
     }
 
-    if (!chars) {
-        chars = new char[strlen(input) + 1];
 
-    } else {
-        delete[]chars;
-        chars = new char[strlen(temp) + 1];
-    }
+    chars = new char[strlen(input) + 1];
     // copy the users input into the passed in pointer.
     strcpy(chars, input);
     // get rid of our dynamic input pointer.
     delete[]input;
 }
 
-int menu()
+void menu(songList &list)
 {
     int option;
     char * artistName = nullptr;
     song newSong;
-    songList unsortedList;
+
     while(option != 5)
     {
 
@@ -81,26 +76,25 @@ int menu()
         switch(option)
         {
             case 1:
-                unsortedList.printList(unsortedList);
+                list.printList(list);
                 break;
             case 2:
                 cout << "Enter an artist name to display: ";
                 getInput(artistName);
-                unsortedList.printByArtist(artistName);
+                list.printByArtist(artistName);
                 delete []artistName;
                 break;
             case 3:
                 newSong = getSongInfo();
-                unsortedList.append(newSong);
+                list.insert(newSong);
                 break;
             case 4:
-                option = '0';
+                cout << "Remove less than m likes" << endl;
             default:
                 cout << "invalid input, please try again " << endl;
         }
     }
 
-    return option;
 }
 
 song getSongInfo()
@@ -108,8 +102,8 @@ song getSongInfo()
     song newSong;
     char * artistName = nullptr;
     char * songTitle = nullptr;
-    int likes;
-    float length;
+    int  likes;
+    int  length;
     cout << "Enter the artist of this songs name: ";
     getInput(artistName);
     cout << "Enter the title for this song: ";
@@ -141,16 +135,19 @@ song getSongInfo()
     newSong.setNumberOfLikes(likes);
     newSong.setLength(length);
 
+	delete []artistName;
+	delete []songTitle;
     return newSong;
 }
 
 int main()
 {
     cout << "Welcome to the song list database. " << endl;
-    while(menu() != 5)
-    {
-        menu();
-    }
+    songList list;
+    char fileName[101] = "roster.txt";
+   
+    list.loadFromFile(fileName);
+    menu(list);
 
 
 }

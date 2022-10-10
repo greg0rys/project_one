@@ -26,38 +26,22 @@ song & song::operator=(const song &aCopy)
         return *this;
     }
 
-    if(artistName)
-        delete []artistName;
-    if(title)
-        delete []title;
 
-    if(!aCopy.artistName && !aCopy.title)
-    {
-        artistName = nullptr;
-        title = nullptr;
-        setLength(aCopy.length);
-        setNumberOfLikes(aCopy.numOfLikes);
-    }
-    else if(!aCopy.artistName && aCopy.title)
-    {
-        artistName = nullptr;
-        setTitle(aCopy.title);
-        setLength(aCopy.length);
-        setNumberOfLikes(aCopy.numOfLikes);
-    }
-    else if(aCopy.artistName && !aCopy.title)
+
+
+    if(aCopy.artistName && aCopy.title)
     {
         setArtist(aCopy.artistName);
-        title = nullptr;
-        setLength(aCopy.length);
-        setNumberOfLikes(aCopy.numOfLikes);
+        setTitle(aCopy.title);
+        setNumberOfLikes(aCopy.getLikes());
+        setLength(aCopy.getLength());
     }
     else
     {
-        setArtist(aCopy.artistName);
-        setTitle(aCopy.title);
-        setLength(aCopy.length);
-        setNumberOfLikes(aCopy.numOfLikes);
+        artistName = nullptr;
+        title = nullptr;
+        setNumberOfLikes(aCopy.getLikes());
+        setLength(aCopy.getLength());
     }
     return *this;
 }
@@ -93,11 +77,8 @@ void song::setNumberOfLikes(int likes)
 
 void song::getArtist(char * artist) const
 {
-    if(!artist)
-        artist = new char[strlen(artistName) + 1];
-    else
-        delete []artist;
-        artist = new char[strlen(artistName) + 1];
+
+
     strcpy(artist, artistName);
 }
 
@@ -131,11 +112,25 @@ int song::getLikes() const
 ostream& operator<<(ostream &out, const song &aSong)
 {
     int mins = (aSong.length / 60);
-    int seconds = (aSong.length % 60) / 100;
+    int seconds = (aSong.length % 60) * 100;
     out << aSong.artistName << " " << aSong.title
         << " " << mins  << "m " << seconds << "s " << aSong.numOfLikes
         << endl;
 
     return out;
+}
+
+
+
+int song::getArtistNameLength() const
+{
+    return strlen(artistName);
+}
+
+
+
+bool operator<(const song &songOne, const song &songTwo)
+{
+    return (songOne.getLikes() < songTwo.getLikes());
 }
 

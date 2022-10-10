@@ -22,7 +22,9 @@ class song
 		void getTitle(char *) const;
 		int getLength() const;
 		int getLikes() const;
+        int getArtistNameLength() const;
        friend ostream&operator<< (ostream &, const song &);
+
 
 
 private:
@@ -31,4 +33,9 @@ private:
 		int length;
 		int numOfLikes;
 
+
+
+
 };
+
+bool operator< (const song &, const song&);

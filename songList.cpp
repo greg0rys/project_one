@@ -24,7 +24,27 @@ void songList::destroy()
         delete index;
         curr = index;
     }
+
+    index = nullptr;
     size = 0;
+}
+
+
+bool songList::insert(const song &aSong)
+{
+    node * curr = index;
+    node * newNode = new node(aSong);
+
+    if(!index)
+    {
+        index = newNode;
+        tail = newNode;
+    }
+    else
+    {
+        delete newNode;
+        append(aSong);
+    }
 }
 
 void songList::append(const song &aSong)
@@ -74,6 +94,9 @@ songList::node* songList::getSongAt(const char * songName)
 
     while(curr)
     {
+        if(currentSongName)
+            delete []currentSongName;
+
         curr->data->getTitle(currentSongName);
         if(strcmp(songName, currentSongName) == 0)
         {
@@ -125,6 +148,16 @@ void songList::printByArtist(const char * artName)
 
     while(curr)
     {
+        if(currentSongName)
+        {
+            delete []currentSongName;
+            currentSongName = new char[curr->data->getArtistNameLength() + 1];
+        }
+        else
+        {
+            currentSongName = new char[curr->data->getArtistNameLength() + 1];
+        }
+
         curr->data->getArtist(currentSongName);
         if(strcmp(currentSongName, artName) == 0)
         {
@@ -135,6 +168,9 @@ void songList::printByArtist(const char * artName)
     }
 
     cout << sortedList << endl;
+
+    if(currentSongName)
+        delete []currentSongName;
 
 }
 
@@ -175,10 +211,46 @@ void songList::insertSorted(const song & aSong, songList & aList)
 }
 
 
-void songList::loadFromFile(const char * filename)
+void songList::loadFromFile( char * filename)
 {
     ifstream file;
     song currentSong;
+    const int MAX_CHAR = 101;
+    char artistName[MAX_CHAR];
+    char title[MAX_CHAR];
+    int likes;
+    int length;
+
+    file.open(filename);
+    if(!file)
+    {
+        cerr << "Failed to open " << filename << " for reading" << endl;
+        return;
+    }
+    else
+    {
+        cout << filename << " is open";
+    }
+    file.get(artistName, MAX_CHAR, ';');
+
+    while(!file.eof())
+    {
+        file.get(); // extract delm from the stream
+        file.get(title, MAX_CHAR, ';');
+        file >> likes;
+        file.ignore(MAX_CHAR, ';');
+        file >> length;
+        file.ignore(MAX_CHAR, '\n');
+
+        currentSong.setArtist(artistName);
+        currentSong.setTitle(title);
+        currentSong.setNumberOfLikes(likes);
+        currentSong.setLength(length);
+        insert(currentSong);
+        file.get(artistName, MAX_CHAR, ';');
+    }
+
+    file.close();
 
 }
 

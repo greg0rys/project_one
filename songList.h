@@ -34,9 +34,9 @@ private:
         }
     };
 
-    void destroy();
-    node * getArtistAt(const char *);
-    node * getSongAt(const char *);
+    void destroy(); // destroy the pointers in our list
+    node * getArtistAt(const char *); // get a pointer to a node in our list
+    node * getSongAt(const char *); // get a pointer to a node in our list
 
     node * index;
     node * tail;
@@ -46,14 +46,16 @@ public:
     songList();
     songList(const songList &);
     ~songList();
-    void append(const song &);
-    bool editLikes(int likes, const char *);
-    void printList(const songList &);
-    void printByArtist(const char *); // will take an artists name;
-    bool isEmpty();
-    void insertSorted(const song &, songList &);
-    void loadFromFile(const char *);
-    songList & operator=(const songList &);
-    friend ostream&operator<< (ostream &, const songList &);
+	bool insert(const song &); // insert a new song at the front of the list
+    void append(const song &); // insert a new song at the end of the list
+    bool editLikes(int likes, const char *); // edit the likes for a song.
+    void printList(const songList &); // print the list unordered.
+    void printByArtist(const char *); // print an ordered list by artist name.
+    bool isEmpty(); // check if this list is empty
+    void insertSorted(const song &, songList &); // insert into a list sorted
+    void loadFromFile(char *); // load song data from a file.
+    songList & operator=(const songList &); // overloaded assignment
+    friend ostream&operator<< (ostream &, const songList &); // overloaded stream insertion
+
 
 };
