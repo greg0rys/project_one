@@ -52,26 +52,31 @@ int menu()
     char * artistName = nullptr;
     song newSong;
     songList unsortedList;
-
-    cout << "Menu: \n"
-         << "\t1. Print List \n"
-         << "\t2. Print Songs By an Artist \n"
-         << "\t3. Add a new song to the list \n"
-         << "\t4. Remove songs with less than a given number of likes \n"
-         << "\t5. Quit\n"
-         << endl << endl;
-    cout << "Enter an option: ";
-    cin >> option;
-    while(cin.fail())
+    while(option != 5)
     {
-        cin.clear();
-        cin.ignore(101,'\n');
 
-        cout << "ERR please enter the number of your menu choice: (EX 1 to print the list) " << endl;
-        cout << "Please enter a menu choice: ";
+        cout << "Menu: \n"
+             << "\t1. Print List \n"
+             << "\t2. Print Songs By an Artist \n"
+             << "\t3. Add a new song to the list \n"
+             << "\t4. Remove songs with less than a given number of likes \n"
+             << "\t5. Quit\n"
+             << endl << endl;
+        cout << "Enter an option: ";
         cin >> option;
-    }
-    cin.ignore(101,'\n');
+        while(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(101,'\n');
+
+            cout << "ERR please enter the number of your menu choice: "
+                 << "(EX 1"
+                    " to print the list) "
+                 << endl;
+            cout << "Please enter a menu choice: ";
+            cin >> option;
+        }
+        cin.ignore(101,'\n');
 
         switch(option)
         {
@@ -93,6 +98,7 @@ int menu()
             default:
                 cout << "invalid input, please try again " << endl;
         }
+    }
 
     return option;
 }
