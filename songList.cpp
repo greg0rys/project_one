@@ -211,48 +211,7 @@ void songList::insertSorted(const song & aSong, songList & aList)
 }
 
 
-void songList::loadFromFile( char * filename)
-{
-    ifstream file;
-    song currentSong;
-    const int MAX_CHAR = 101;
-    char artistName[MAX_CHAR];
-    char title[MAX_CHAR];
-    int likes;
-    int length;
 
-    file.open(filename);
-    if(!file)
-    {
-        cerr << "Failed to open " << filename << " for reading" << endl;
-        return;
-    }
-    else
-    {
-        cout << filename << " is open";
-    }
-    file.get(artistName, MAX_CHAR, ';');
-
-    while(!file.eof())
-    {
-        file.get(); // extract delm from the stream
-        file.get(title, MAX_CHAR, ';');
-        file >> likes;
-        file.ignore(MAX_CHAR, ';');
-        file >> length;
-        file.ignore(MAX_CHAR, '\n');
-
-        currentSong.setArtist(artistName);
-        currentSong.setTitle(title);
-        currentSong.setNumberOfLikes(likes);
-        currentSong.setLength(length);
-        insert(currentSong);
-        file.get(artistName, MAX_CHAR, ';');
-    }
-
-    file.close();
-
-}
 
 songList & songList::operator=(const songList &aList)
 {

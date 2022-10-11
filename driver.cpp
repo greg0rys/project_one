@@ -1,4 +1,6 @@
 #include "driver.h"
+#include "songList.h"
+#include "song.h"
 
 
 
@@ -140,13 +142,65 @@ song getSongInfo()
     return newSong;
 }
 
+
+void loadFromFile(char filename[], songList &list)
+{
+    ifstream file(filename);
+    song currentSong;
+    const int MAX_CHAR = 101;
+    char artistName[MAX_CHAR];
+    char title[MAX_CHAR];
+    int likes;
+    int length;
+
+
+    if(!file)
+    {
+        cerr << "Failed to open " << filename << " for reading" << endl;
+        return;
+    }
+    else
+    {
+        cout << filename << " is open";
+    }
+    file.get(artistName, MAX_CHAR, ';');
+
+    while(!file.eof())
+    {
+        file.get(); // extract delm from the stream
+        file.get(title, MAX_CHAR, ';');
+        file >> likes;
+        file.ignore(MAX_CHAR, ';');
+        file >> length;
+        file.ignore(MAX_CHAR, '\n');
+
+        currentSong.setArtist(artistName);
+        currentSong.setTitle(title);
+        currentSong.setNumberOfLikes(likes);
+        currentSong.setLength(length);
+        list.insert(currentSong);
+        file.get(artistName, MAX_CHAR, ';');
+    }
+
+    file.close();
+
+}
+
 int main()
 {
     cout << "Welcome to the song list database. " << endl;
     songList list;
-    char fileName[101] = "roster.txt";
-   
-    list.loadFromFile(fileName);
+    char filename[]="songs.txt\0";
+    ifstream in(filename);
+
+    if(!in)
+    {
+        cout << filename << " error";
+        exit(0);
+    }
+
+    loadFromFile(filename,list);
+
     menu(list);
 
 
