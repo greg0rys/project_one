@@ -344,7 +344,7 @@ songList & songList::operator=(const songList &aList)
 
     node * newNode = new node(*aList.index->data);
     index = tail = newNode;
-    node * sourceNext = sourceNext->next;
+    node * sourceNext = sourceNext->next; // this needs to be changed.
     node * newList = index;
 
     while(sourceNext)
