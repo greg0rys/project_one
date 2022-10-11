@@ -1,12 +1,20 @@
 #include "song.h"
 
 
-
+/*
+ * default class constructor.
+ */
 song::song() : artistName(nullptr), title(nullptr), length(0), numOfLikes(0)
 {}
 
 
-
+/*
+ * set a new song object up by passing in the songs information
+ * INPUT artist a pointer that contains the songs name, title a pointer that
+ * contains the title for the song, length an integer that represents the
+ * total number of seconds for this song, numLikes an integer that
+ * represents the total number of likes for a song.
+ */
 song::song(const char *artist, const char *title, int length, int numLikes)
 {
     artistName = new char[strlen(artist) + 1];
@@ -18,7 +26,9 @@ song::song(const char *artist, const char *title, int length, int numLikes)
 }
 
 
-
+/*
+ * copy constructor
+ */
 song::song(const song &aCopy)
         : artistName(nullptr), title(nullptr), length(0), numOfLikes(0)
 {
@@ -26,14 +36,18 @@ song::song(const song &aCopy)
 }
 
 
-
+/*
+ * class destructor
+ */
 song::~song()
 {
     destroy();
 }
 
 
-
+/*
+ * overloaded assignment operator to avoid shallow copies.
+ */
 song &song::operator=(const song &aCopy)
 {
     if (this == &aCopy) {
@@ -67,7 +81,10 @@ song &song::operator=(const song &aCopy)
 }
 
 
-
+/*
+ * sets the artist for this song
+ * INPUT: name a pointer that contains the artist name.
+ */
 void song::setArtist(const char *name)
 {
     if (this->artistName) {
@@ -78,34 +95,50 @@ void song::setArtist(const char *name)
 }
 
 
-
-void song::setTitle(const char *title)
+/*
+ * sets the title for this song
+ * INPUT: sTitle a pointer containing the songs title.
+ */
+void song::setTitle(const char *sTitle)
 {
 
     if (this->title) {
         delete[] this->title;
     }
-    this->title = new char[strlen(title) + 1];
-    strcpy(this->title, title);
+    this->title = new char[strlen(sTitle) + 1];
+    strcpy(this->title, sTitle);
 }
 
 
-
+/*
+ * set the length for this song
+ * INPUT: songLength an integer representing the total number of seconds a
+ * song is.
+ */
 void song::setLength(int songLength)
 { length = songLength; }
 
 
-
+/*
+ * set the number of likes for this song
+ * INPUT: likes an integer representing the number of likes for this song.
+ */
 void song::setNumberOfLikes(int likes)
 { numOfLikes = likes; }
 
 
-
+/*
+ * returns the artist of a given song
+ * input: artist a pointer that we wish to copy the artists name into.
+ */
 void song::getArtist(char *artist) const
 { strcpy(artist, artistName); }
 
 
-
+/*
+ * returns the title of a given song
+ * INPUT: songTitle a pointer that we wish to copy the songs title into.
+ */
 void song::getTitle(char *songTitle) const
 {
     if (!songTitle) {
@@ -119,7 +152,10 @@ void song::getTitle(char *songTitle) const
 }
 
 
-
+/*
+ * this function is called when a member of this class is destroyed, it will
+ * deallocate the dynamic char arrays for artist name and the songs title.
+ */
 void song::destroy()
 {
     if (this->artistName) {
@@ -134,17 +170,26 @@ void song::destroy()
 }
 
 
-
+/*
+ * returns the length of the current song
+ */
 unsigned int song::getLength() const
 { return length; }
 
 
-
+/*
+ * returns the number of likes of this song
+ */
 unsigned int song::getLikes() const
 { return numOfLikes; }
 
 
-
+/*
+ * overloaded stream operator to output all data about a song when it is
+ * called by cout << aSong.
+ * INPUT: ostream the current output stream, aSong the song we wish to output.
+ * OUTPUT: all the information about a given song.
+ */
 ostream &operator<<(ostream &out, const song &aSong)
 {
     unsigned int mins = (aSong.length / 60);
@@ -156,12 +201,18 @@ ostream &operator<<(ostream &out, const song &aSong)
 }
 
 
-
+/*
+ * returns the length of the artist name length.
+ */
 unsigned int song::getArtistNameLength() const
 { return strlen(artistName); }
 
 
-
+/*
+ * compare two song objects return true if songOnes likes are greater than
+ * the likes of songTwo
+ * else return false.
+ */
 bool operator<(const song &songOne, const song &songTwo)
 {
     return (songOne.getLikes() < songTwo.getLikes());

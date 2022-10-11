@@ -3,7 +3,11 @@
 #include "song.h"
 
 
-
+/*
+ * the get input function allows us to read in dynamic cstrings from the user
+ * INPUT: char *& chars - a pointer that will be used to store the input
+ * from the user
+ */
 void getInput(char *& chars) {
     char *input = nullptr;
     char *temp = nullptr;

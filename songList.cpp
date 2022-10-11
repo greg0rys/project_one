@@ -1,20 +1,31 @@
 #include "songList.h"
 
+/*
+ * default constructor
+ */
 songList::songList(): index(nullptr), tail(nullptr), size(0)
 {}
 
+/*
+ * copy constructor
+ */
 songList::songList(const songList &source):index(nullptr), tail(nullptr),
 size(0)
 {
     *this = source;
 }
 
-
+/*
+ * class destructor
+ */
 songList::~songList()
 {
     destroy();
 }
 
+/*
+ * deallocates the pointers for the class and sets them to nullptr
+ */
 void songList::destroy()
 {
     node * curr = index;
@@ -29,7 +40,10 @@ void songList::destroy()
     size = 0;
 }
 
-
+/*
+ * insert a new song into the list
+ * INPUT aSong a reference to a song object
+ */
 bool songList::insert(const song &aSong)
 {
     node * curr = index;
@@ -47,6 +61,10 @@ bool songList::insert(const song &aSong)
     }
 }
 
+/*
+ * append a new song to the end of the list
+ * INPUT: aSong a reference to a song object
+ */
 void songList::append(const song &aSong)
 {
     node * newNode = new node(aSong);
@@ -67,7 +85,11 @@ void songList::append(const song &aSong)
 
 }
 
-
+/*
+ * Get a given artist node from the list
+ * INPUT: artName a pointer containing the artist name
+ * OUTPUT: node * a pointer to the located node.
+ */
 songList::node* songList::getArtistAt(const char * artName)
 {
     node * curr = index;
@@ -85,8 +107,11 @@ songList::node* songList::getArtistAt(const char * artName)
     return curr;
 }
 
-// these may need to be defined in the .h file to avoid this error of no
-// type found for *node.
+/*
+ * Get a given song node from the list based on song title
+ * INPUT: songName a pointer containing the songs name
+ * OUTPUT: node * a pointer to the located node.
+ */
 songList::node* songList::getSongAt(const char * songName)
 {
     node * curr = index;
@@ -129,7 +154,10 @@ bool songList::editLikes(int likes, const char * name)
     return success;
 }
 
-
+/*
+ * print all of the songs in our list (unsorted)
+ * INPUT list a reference to a list
+ */
 void songList::printList(const songList &list)
 {
 
@@ -139,7 +167,10 @@ void songList::printList(const songList &list)
         cout << list;
 }
 
-
+/*
+ * print songs in the list for a given artist sorted by likes.
+ * INPUT: artName a pointer containing the artist name we wish to print
+ */
 void songList::printByArtist(const char * artName)
 {
     songList sortedList;
@@ -171,13 +202,19 @@ void songList::printByArtist(const char * artName)
 
 }
 
-
+/*
+ * Check to see if the list is empty
+ * returns true if the list is empty false if else.
+ */
 bool songList::isEmpty()
 {
     return (index == nullptr);
 }
 
-
+/*
+ * insert a new song to the list sorted by likes
+ * INPUT aSong a reference to a song object
+ */
 void songList::insertSorted(const song & aSong)
 {
     node * current = index;
@@ -218,6 +255,11 @@ void songList::insertSorted(const song & aSong)
 }
 
 
+/*
+ * remove a song from the list based on the number of likes it has
+ * INPUT target an integer containing the number of likes we wish to delete
+ * returns true if able to remove the node else returns false.
+ */
 bool songList::removeByLikes(const int target)
 {
     bool success = false;
@@ -243,6 +285,11 @@ bool songList::removeByLikes(const int target)
     return success;
 }
 
+/*
+ * remove a node from the list
+ * INPUT toRemove a reference to the node pointer we wish to delete
+ * returns true if deleted false if else.
+ */
 bool songList::remove(node *& toRemove)
 {
     node * curr = index;
@@ -278,6 +325,9 @@ bool songList::remove(node *& toRemove)
     }
 };
 
+/*
+ * overloaded assignment operator
+ */
 songList & songList::operator=(const songList &aList)
 {
     if(this == &aList)
@@ -312,7 +362,9 @@ songList & songList::operator=(const songList &aList)
     return *this;
 }
 
-
+/*
+ * overloaded output stream operator
+ */
  ostream& operator<<(ostream & out, const songList & aList)
 {
 
