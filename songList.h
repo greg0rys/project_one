@@ -52,7 +52,7 @@ public:
     void printList(const songList &); // print the list unordered.
     void printByArtist(const char *); // print an ordered list by artist name.
     bool isEmpty(); // check if this list is empty
-    void insertSorted(const song &, songList &); // insert into a list sorted
+    void insertSorted(const song &, node *&, songList &); // insert into a list sorted
 
     songList & operator=(const songList &); // overloaded assignment
     friend ostream&operator<< (ostream &, const songList &); // overloaded stream insertion

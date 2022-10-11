@@ -143,25 +143,22 @@ void songList::printList(const songList &list)
 void songList::printByArtist(const char * artName)
 {
     songList sortedList;
+    song tempSong;
     node * curr = index;
-    char * currentSongName = nullptr;
+    char * currentArtist = nullptr;
 
     while(curr)
     {
-        if(currentSongName)
-        {
-            delete []currentSongName;
-            currentSongName = new char[curr->data->getArtistNameLength() + 1];
-        }
-        else
-        {
-            currentSongName = new char[curr->data->getArtistNameLength() + 1];
-        }
+        if(currentArtist)
+            delete []currentArtist;
+        currentArtist = new char[curr->data->getArtistNameLength() + 1];
+        curr->data->getArtist(currentArtist);
 
-        curr->data->getArtist(currentSongName);
-        if(strcmp(currentSongName, artName) == 0)
+        if(strcmp(currentArtist, artName) == 0)
         {
-            insertSorted(*curr->data, sortedList);
+
+                tempSong = *(curr->data);
+                sortedList.insert(tempSong);
         }
 
         curr = curr->next;
@@ -169,8 +166,8 @@ void songList::printByArtist(const char * artName)
 
     cout << sortedList << endl;
 
-    if(currentSongName)
-        delete []currentSongName;
+    if(currentArtist)
+        delete []currentArtist;
 
 }
 
@@ -181,15 +178,11 @@ bool songList::isEmpty()
 }
 
 
-void songList::insertSorted(const song & aSong, songList & aList)
+void songList::insertSorted(const song & aSong, node *& aListHead,songList &aList)
 {
-    node * curr = aList.index;
+    node * curr = aListHead;
     node * newNode = nullptr;
-    if(!aList.index)
-    {
-        aList.index = new node(aSong);
 
-    }
     while(curr && curr->data->getLikes() < aSong.getLikes())
     {
         curr = curr->next;
@@ -199,7 +192,7 @@ void songList::insertSorted(const song & aSong, songList & aList)
     {
         newNode = new node(aSong);
         aList.tail->next = newNode;
-        newNode->prev = tail;
+        newNode->prev = aList.tail;
         aList.tail = newNode;
     }
     else

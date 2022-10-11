@@ -36,9 +36,9 @@ void getInput(char *& chars) {
     }
 
 
-    chars = new char[strlen(input) + 1];
+    chars = new char[strlen(temp) + 1];
     // copy the users input into the passed in pointer.
-    strcpy(chars, input);
+    strcpy(chars, temp);
     // get rid of our dynamic input pointer.
     delete[]input;
 }
@@ -145,7 +145,7 @@ song getSongInfo()
 
 void loadFromFile(char filename[], songList &list)
 {
-    ifstream file(filename);
+    fstream file(filename);
     song currentSong;
     const int MAX_CHAR = 101;
     char artistName[MAX_CHAR];
@@ -157,28 +157,24 @@ void loadFromFile(char filename[], songList &list)
     if(!file)
     {
         cerr << "Failed to open " << filename << " for reading" << endl;
-        return;
+        exit(0);
     }
-    else
-    {
-        cout << filename << " is open";
-    }
+
     file.get(artistName, MAX_CHAR, ';');
 
     while(!file.eof())
     {
-        file.get(); // extract delm from the stream
+        file.get();
         file.get(title, MAX_CHAR, ';');
+        file.get();
         file >> likes;
         file.ignore(MAX_CHAR, ';');
         file >> length;
         file.ignore(MAX_CHAR, '\n');
 
-        currentSong.setArtist(artistName);
-        currentSong.setTitle(title);
-        currentSong.setNumberOfLikes(likes);
-        currentSong.setLength(length);
-        list.insert(currentSong);
+        song tempSong(artistName,title,length, likes);
+        cout << tempSong;
+        list.insert(tempSong);
         file.get(artistName, MAX_CHAR, ';');
     }
 
@@ -190,18 +186,11 @@ int main()
 {
     cout << "Welcome to the song list database. " << endl;
     songList list;
-    char filename[]="songs.txt\0";
-    ifstream in(filename);
-
-    if(!in)
-    {
-        cout << filename << " error";
-        exit(0);
-    }
-
+    char filename[11];
+    strcpy(filename, "roster.txt");
     loadFromFile(filename,list);
-
     menu(list);
+    return 0;
 
 
 }

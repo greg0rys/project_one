@@ -61,7 +61,7 @@ void song::setArtist(const char *name) {
         delete[] artistName;
     }
     this->artistName = new char[strlen(name) + 1];
-    strcpy(artistName, name);
+    strcpy(this->artistName, name);
 }
 
 void song::setTitle(const char *title) {
