@@ -3,3 +3,5 @@ logins.txt
 CMakeLists.txt
 cmake-build-debug
 main
+session
+config.txt

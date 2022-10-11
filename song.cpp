@@ -1,8 +1,14 @@
 #include "song.h"
 
-song::song() : artistName(nullptr), title(nullptr), length(0), numOfLikes(0) {}
 
-song::song(const char *artist, const char *title, int length, int numLikes) {
+
+song::song() : artistName(nullptr), title(nullptr), length(0), numOfLikes(0)
+{}
+
+
+
+song::song(const char *artist, const char *title, int length, int numLikes)
+{
     artistName = new char[strlen(artist) + 1];
     strcpy(artistName, artist);
     this->title = new char[strlen(title) + 1];
@@ -11,21 +17,25 @@ song::song(const char *artist, const char *title, int length, int numLikes) {
     numOfLikes = numLikes;
 }
 
+
+
 song::song(const song &aCopy)
-        : artistName(nullptr), title(nullptr), length(0), numOfLikes(0) {
+        : artistName(nullptr), title(nullptr), length(0), numOfLikes(0)
+{
     *this = aCopy;
 }
 
-song::~song() {
-    if (artistName)
-        delete[] artistName;
-    else if (title)
-        delete[] title;
-    artistName = nullptr;
-    title = nullptr;
+
+
+song::~song()
+{
+    destroy();
 }
 
-song &song::operator=(const song &aCopy) {
+
+
+song &song::operator=(const song &aCopy)
+{
     if (this == &aCopy) {
         return *this;
     }
@@ -56,7 +66,10 @@ song &song::operator=(const song &aCopy) {
     return *this;
 }
 
-void song::setArtist(const char *name) {
+
+
+void song::setArtist(const char *name)
+{
     if (this->artistName) {
         delete[] artistName;
     }
@@ -64,22 +77,37 @@ void song::setArtist(const char *name) {
     strcpy(this->artistName, name);
 }
 
-void song::setTitle(const char *title) {
+
+
+void song::setTitle(const char *title)
+{
 
     if (this->title) {
         delete[] this->title;
     }
-    this->title = new char(strlen(title) + 1);
+    this->title = new char[strlen(title) + 1];
     strcpy(this->title, title);
 }
 
-void song::setLength(int songLength) { length = songLength; }
 
-void song::setNumberOfLikes(int likes) { numOfLikes = likes; }
 
-void song::getArtist(char *artist) const { strcpy(artist, artistName); }
+void song::setLength(int songLength)
+{ length = songLength; }
 
-void song::getTitle(char *songTitle) const {
+
+
+void song::setNumberOfLikes(int likes)
+{ numOfLikes = likes; }
+
+
+
+void song::getArtist(char *artist) const
+{ strcpy(artist, artistName); }
+
+
+
+void song::getTitle(char *songTitle) const
+{
     if (!songTitle) {
         songTitle = new char[strlen(title) + 1];
     } else {
@@ -90,35 +118,51 @@ void song::getTitle(char *songTitle) const {
     strcpy(songTitle, title);
 }
 
-void song::destroy() {
-    if (artistName) {
-        delete[] artistName;
-    }
-    if (title) {
-        delete[] title;
-    }
 
-    artistName = nullptr;
-    title = nullptr;
-    length = 0;
-    numOfLikes = 0;
+
+void song::destroy()
+{
+    if (this->artistName) {
+        delete []artistName;
+    }
+    if (this->title) {
+        delete []title;
+    }
+    this->artistName = nullptr;
+    this->title = nullptr;
+
 }
 
-int song::getLength() const { return length; }
 
-int song::getLikes() const { return numOfLikes; }
 
-ostream &operator<<(ostream &out, const song &aSong) {
-    int mins = (aSong.length / 60);
-    int seconds = (aSong.length % 60) * 100;
+unsigned int song::getLength() const
+{ return length; }
+
+
+
+unsigned int song::getLikes() const
+{ return numOfLikes; }
+
+
+
+ostream &operator<<(ostream &out, const song &aSong)
+{
+    unsigned int mins = (aSong.length / 60);
+    unsigned int seconds = (aSong.length % 60);
     out << aSong.artistName << " " << aSong.title << " " << mins << "m "
         << seconds << "s " << aSong.numOfLikes << endl;
 
     return out;
 }
 
-int song::getArtistNameLength() const { return strlen(artistName); }
 
-bool operator<(const song &songOne, const song &songTwo) {
+
+unsigned int song::getArtistNameLength() const
+{ return strlen(artistName); }
+
+
+
+bool operator<(const song &songOne, const song &songTwo)
+{
     return (songOne.getLikes() < songTwo.getLikes());
 }

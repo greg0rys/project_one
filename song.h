@@ -21,9 +21,9 @@ public:
     void setNumberOfLikes(int);
     void getArtist(char *) const;
     void getTitle(char *) const;
-    int getLength() const;
-    int getLikes() const;
-    int getArtistNameLength() const;
+    unsigned int getLength() const;
+    unsigned int getLikes() const;
+    unsigned int getArtistNameLength() const;
     friend ostream&operator<< (ostream &, const song &);
 
 
@@ -31,8 +31,8 @@ public:
 private:
     char * artistName;
     char * title;
-    int length;
-    int numOfLikes;
+    unsigned int length;
+    unsigned int numOfLikes;
     void destroy();
 
 

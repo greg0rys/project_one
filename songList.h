@@ -18,19 +18,17 @@ private:
             prev = nullptr;
         }
 
-        node(const song &aSong)
+         node(const song &aSong)
         {
             data = new song(aSong);
-            next = nullptr;
-            prev = nullptr;
+            prev = next = nullptr;
         }
 
         ~node()
         {
             delete data;
             data = nullptr;
-            next = nullptr;
-            prev = nullptr;
+            prev = next = nullptr;
         }
     };
 
@@ -52,7 +50,9 @@ public:
     void printList(const songList &); // print the list unordered.
     void printByArtist(const char *); // print an ordered list by artist name.
     bool isEmpty(); // check if this list is empty
-    void insertSorted(const song &, node *&, songList &); // insert into a list sorted
+    void insertSorted(const song &); // insert into a list sorted
+    bool removeByLikes(const int);
+    bool remove(node *&);
 
     songList & operator=(const songList &); // overloaded assignment
     friend ostream&operator<< (ostream &, const songList &); // overloaded stream insertion

@@ -36,16 +36,17 @@ void getInput(char *& chars) {
     }
 
 
-    chars = new char[strlen(temp) + 1];
+    chars = new char[strlen(input) + 1];
     // copy the users input into the passed in pointer.
-    strcpy(chars, temp);
+    strcpy(chars, input);
     // get rid of our dynamic input pointer.
     delete[]input;
 }
 
 void menu(songList &list)
 {
-    int option;
+    int option = 0;
+    int likesToRemove;
     char * artistName = nullptr;
     song newSong;
 
@@ -91,7 +92,22 @@ void menu(songList &list)
                 list.insert(newSong);
                 break;
             case 4:
-                cout << "Remove less than m likes" << endl;
+               cout << "Enter the number of likes you'd like to delete: ";
+               cin >> likesToRemove;
+
+               if(cin.fail())
+               {
+                   cin.clear();
+                   cin.ignore(101,'\n');
+                   cerr << "Please enter a number of likes (EX 100 or 225)"
+                   << endl;
+                   cout << "Please reinput the number of likes: ";
+                   cin >> likesToRemove;
+               }
+               cin.ignore(101,'\n');
+               list.removeByLikes(likesToRemove);
+            case 5:
+                break;
             default:
                 cout << "invalid input, please try again " << endl;
         }
@@ -99,6 +115,11 @@ void menu(songList &list)
 
 }
 
+
+/*
+ * gets user inputs to set up the data about a song.
+ * @return the new song object created from the inputs.
+ * */
 song getSongInfo()
 {
     song newSong;
@@ -116,7 +137,8 @@ song getSongInfo()
     {
         cin.clear();
         cin.ignore(101,'\n');
-        cout << "ERR invalid input please enter a number of likes (EX: 100) " << endl;
+        cout << "ERR invalid input please enter a number of likes (EX: 100) "
+             << endl;
         cout << "Enter number of likes for this song: ";
         cin >> likes;
     }
@@ -127,7 +149,8 @@ song getSongInfo()
     {
         cin.clear();
         cin.ignore(101,'\n');
-        cout << "Please enter length as a number for this song (EX:4.50) " << endl;
+        cout << "Please enter length as a number for this song (EX:4.50) "
+             << endl;
         cout << "Enter length of this song: ";
         cin >> length;
     }
@@ -137,13 +160,15 @@ song getSongInfo()
     newSong.setNumberOfLikes(likes);
     newSong.setLength(length);
 
-	delete []artistName;
-	delete []songTitle;
+
+    delete []artistName;
+    delete []songTitle;
+
     return newSong;
 }
 
 
-void loadFromFile(char filename[], songList &list)
+void loadFromFile(const char * filename, songList &list)
 {
     fstream file(filename);
     song currentSong;
@@ -157,7 +182,7 @@ void loadFromFile(char filename[], songList &list)
     if(!file)
     {
         cerr << "Failed to open " << filename << " for reading" << endl;
-        exit(0);
+        return; // allow program to continue without the file data.
     }
 
     file.get(artistName, MAX_CHAR, ';');
@@ -172,7 +197,7 @@ void loadFromFile(char filename[], songList &list)
         file >> length;
         file.ignore(MAX_CHAR, '\n');
 
-        song tempSong(artistName,title,length, likes);
+        song tempSong(artistName,title,length,likes);
         cout << tempSong;
         list.insert(tempSong);
         file.get(artistName, MAX_CHAR, ';');
@@ -186,8 +211,7 @@ int main()
 {
     cout << "Welcome to the song list database. " << endl;
     songList list;
-    char filename[11];
-    strcpy(filename, "roster.txt");
+    char filename[] = "roster.txt";
     loadFromFile(filename,list);
     menu(list);
     return 0;

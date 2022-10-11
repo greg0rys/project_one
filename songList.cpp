@@ -21,7 +21,7 @@ void songList::destroy()
     while(curr)
     {
         index = curr->next;
-        delete index;
+        delete curr;
         curr = index;
     }
 
@@ -158,7 +158,7 @@ void songList::printByArtist(const char * artName)
         {
 
                 tempSong = *(curr->data);
-                sortedList.insert(tempSong);
+                sortedList.insertSorted(tempSong);
         }
 
         curr = curr->next;
@@ -178,33 +178,105 @@ bool songList::isEmpty()
 }
 
 
-void songList::insertSorted(const song & aSong, node *& aListHead,songList &aList)
+void songList::insertSorted(const song & aSong)
 {
-    node * curr = aListHead;
-    node * newNode = nullptr;
+    node * current = index;
+    if(!index)
+    {
+        node * newNode = new node(aSong);
+        index = newNode;
+        tail = newNode;
+    }
+    else if(current->data->getLength() < aSong.getLength())
+    {
+        node * newNode = new node(aSong);
+        newNode->next = current;
+        newNode->next->prev = newNode;
+        index = newNode;
+    }
+    else
+    {
+        current = index;
 
-    while(curr && curr->data->getLikes() < aSong.getLikes())
+        while(current->next &&
+              current->next->data->getLength() < aSong.getLength())
+        {
+            current = current->next;
+        }
+        node * newNode = new node(aSong);
+        newNode->next = current->next;
+
+        if(current->next)
+        {
+            newNode->next->prev = newNode;
+        }
+
+        current->next = newNode;
+        newNode->prev = current;
+    }
+
+}
+
+
+bool songList::removeByLikes(const int target)
+{
+    bool success = false;
+    node * curr = index;
+    int counter = 0;
+    if(target < 0)
+        return success;
+
+    while(curr && curr->next->data->getLikes() > target)
     {
         curr = curr->next;
     }
 
-    if(!curr)
+    if(curr)
     {
-        newNode = new node(aSong);
-        aList.tail->next = newNode;
-        newNode->prev = aList.tail;
-        aList.tail = newNode;
+        remove(curr);
     }
     else
     {
-        newNode = new node(aSong);
-        newNode->prev = curr;
-        newNode->next = curr->next;
+        return false;
     }
+
+    return success;
 }
 
+bool songList::remove(node *& toRemove)
+{
+    node * curr = index;
+    if(!isEmpty())
+    {
+        while(curr && curr != toRemove)
+        {
+            curr = curr->next;
+        }
 
+        if(curr == index)
+        {
+            index = toRemove->next;
+        }
 
+        if(toRemove->next)
+        {
+            toRemove->next->prev = toRemove->prev;
+        }
+
+        if(toRemove->prev)
+        {
+            toRemove->prev->next = toRemove->next;
+        }
+
+        delete toRemove;
+        return true;
+
+    }
+    else
+    {
+        return false;
+    }
+};
 
 songList & songList::operator=(const songList &aList)
 {
