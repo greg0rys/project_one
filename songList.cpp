@@ -182,6 +182,7 @@ bool songList::printByArtist(const char * artName)
     {
         if(currentArtist)
             delete []currentArtist;
+
         currentArtist = new char[curr->data->getArtistNameLength() + 1];
         curr->data->getArtist(currentArtist);
 
@@ -219,39 +220,35 @@ bool songList::isEmpty()
  */
 void songList::insertSorted(const song & aSong)
 {
-    node * current = index;
+
+    node * newNode = new node(aSong);
+    node * curr = index;
+
     if(!index)
     {
-        node * newNode = new node(aSong);
         index = newNode;
-        tail = newNode;
     }
-    else if(current->data->getLength() < aSong.getLength())
+    else if(index->data->getLikes() <= aSong.getLikes())
     {
-        node * newNode = new node(aSong);
-        newNode->next = current;
+        newNode->next = index;
         newNode->next->prev = newNode;
         index = newNode;
     }
     else
     {
-        current = index;
-
-        while(current->next &&
-              current->next->data->getLength() < aSong.getLength())
+        while(curr->next && curr->next->data->getLikes() > aSong.getLikes())
         {
-            current = current->next;
+            curr = curr->next;
         }
-        node * newNode = new node(aSong);
-        newNode->next = current->next;
+        newNode->next = curr->next;
 
-        if(current->next)
+        if(curr->next)
         {
             newNode->next->prev = newNode;
         }
 
-        current->next = newNode;
-        newNode->prev = current;
+        curr->next = newNode;
+        newNode->prev = curr;
     }
 
 }
@@ -267,7 +264,6 @@ bool songList::removeByLikes(const int target)
     node * curr = index;
     node * next = nullptr;
     int counter = 0;
-    bool success;
 
     if(!index)
         return false;
@@ -323,7 +319,12 @@ bool songList::remove(node * toRemove)
     return true;
 }
 
-
+/*
+ * Get the number of songs that have less than the target amount of likes
+ * INPUT: target the number of likes the song must be >= to
+ * OUTPUT: total an integer containing the total number of songs that have
+ * less than target likes.
+ */
 int songList::getFrequency(const int target)
 {
     int total = 0;
@@ -345,7 +346,12 @@ int songList::getFrequency(const int target)
     return total;
 }
 
-void songList::loadFromFile(const char * filename)
+
+/*
+ * Load data in from a file. Add a new song object for each line of song
+ * data in the file.
+ */
+int songList::loadFromFile(const char * filename)
 {
     fstream file(filename);
     song currentSong;
@@ -354,12 +360,13 @@ void songList::loadFromFile(const char * filename)
     char title[MAX_CHAR];
     int likes;
     int length;
+    int totalLoaded = 0;
 
 
     if(!file)
     {
         cerr << "Failed to open " << filename << " for reading" << endl;
-        return; // allow program to continue without the file data.
+        return totalLoaded; // allow program to continue without the file data.
     }
 
     file.get(artistName, MAX_CHAR, ';');
@@ -375,51 +382,54 @@ void songList::loadFromFile(const char * filename)
         file.ignore(MAX_CHAR, '\n');
         song tempSong(artistName,title,length,likes);
         insertSorted(tempSong);
-        cout << tempSong;
+        totalLoaded++;
         file.get(artistName, MAX_CHAR, ';');
     }
 
     file.close();
+    return totalLoaded;
 
 }
+
+
 
 /*
  * overloaded assignment operator
  */
 songList & songList::operator=(const songList &aList)
 {
-    node * sourceNext = nullptr;
-    if(this == &aList)
-        return *this;
-    // destroy this list, if it already has data.
-    destroy();
-    size = aList.size;
+   if(this == &aList)
+   {
+       return *this;
+   }
+   destroy();
+   size = aList.size;
 
-    if(!aList.index)
-    {
-        index = tail = nullptr;
-        return *this;
-    }
+   if(!aList.index)
+   {
+       index = tail = nullptr;
+       return *this;
+   }
 
-    node * newNode = new node(*aList.index->data);
-    index = tail = newNode;
-    sourceNext = sourceNext->next; // this needs to be changed.
-    node * newList = index;
+   node * newNode = new node(*(aList.index->data));
+   index = tail = newNode;
+   node * nextSource = aList.index->next;
+   node * nextDest = index;
 
-    while(sourceNext)
-    {
-        newNode = new node(*sourceNext->data);
-        newList->next = newNode;
-        newNode->prev = newList;
-        sourceNext = sourceNext->next;
-        newList = newList->next;
+   while(nextSource)
+   {
+       newNode = new node(*(nextSource->data));
+       nextDest->next = newNode;
+       newNode->prev = nextDest;
+       nextSource = nextSource->next;
+       nextDest = nextDest->next;
+   }
+   tail = nextDest;
 
-
-    }
-    tail = newList;
-
-    return *this;
+   return *this;
 }
+
+
 
 /*
  * overloaded output stream operator

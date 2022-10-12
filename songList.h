@@ -54,7 +54,7 @@ public:
     bool removeByLikes(const int);
     bool remove(node *);
     int getFrequency(const int);
-    void loadFromFile(const char *); // load song data from a file.
+    int loadFromFile(const char *); // load song data from a file.
 
     songList & operator=(const songList &); // overloaded assignment
     friend ostream&operator<< (ostream &, const songList &); // overloaded stream insertion

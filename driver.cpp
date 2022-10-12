@@ -73,6 +73,11 @@ int getInteger()
     return numberIn;
 }
 
+
+/*
+ * Interactive menu for the application, calls list operations based on user
+ * input.
+ */
 void menu(songList &list)
 {
     int option = 0;
@@ -97,7 +102,14 @@ void menu(songList &list)
         switch(option)
         {
             case 1:
-                list.printList(list);
+                if(list.isEmpty())
+                {
+                    cout << "The list is empty! " << endl;
+                }
+                else
+                {
+                    list.printList(list);
+                }
                 break;
             case 2:
                 cout << "Enter an artist name to display: ";
@@ -111,7 +123,7 @@ void menu(songList &list)
                 break;
             case 3:
                 newSong = getSongInfo();
-                list.insert(newSong);
+                list.insertSorted(newSong);
                 break;
             case 4:
                cout << "Enter the number of likes you'd like to delete: ";
@@ -125,7 +137,7 @@ void menu(songList &list)
                 else
                 {
                     cout << "There were no songs with less than " <<
-                    likesToRemove << " in the list" << endl;
+                    likesToRemove << " likes in the list" << endl;
                 }
             case 5:
                 break;
@@ -170,18 +182,35 @@ song getSongInfo()
 }
 
 
+
 void endApplication()
 {
-    cout <<
+    cout << "End app";
+
 }
+
+
 
 int main()
 {
-    cout << "Welcome to the song list database. " << endl;
+    cout << "Welcome to the song list database. " << endl << endl;
     songList list;
     char filename[] = "roster.txt";
-    list.loadFromFile(filename);
+    int totalLoaded = list.loadFromFile(filename);
+
+    if(totalLoaded > 0)
+    {
+        cout << "[ " << totalLoaded << " ] songs loaded from " << "[ " <<
+        filename
+        << " ]" << endl;
+    }
+    else
+    {
+        cout << "Either the file is empty, or there was an error reading the"
+                " file " << filename << endl;
+    }
     menu(list);
+
     return 0;
 
 
