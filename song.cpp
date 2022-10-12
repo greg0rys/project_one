@@ -173,14 +173,14 @@ void song::destroy()
 /*
  * returns the length of the current song
  */
-unsigned int song::getLength() const
+int song::getLength() const
 { return length; }
 
 
 /*
  * returns the number of likes of this song
  */
-unsigned int song::getLikes() const
+int song::getLikes() const
 { return numOfLikes; }
 
 
@@ -204,7 +204,7 @@ ostream &operator<<(ostream &out, const song &aSong)
 /*
  * returns the length of the artist name length.
  */
-unsigned int song::getArtistNameLength() const
+int song::getArtistNameLength() const
 { return strlen(artistName); }
 
 

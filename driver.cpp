@@ -47,10 +47,37 @@ void getInput(char *& chars) {
     delete[]input;
 }
 
+/*
+ * Get integers from the input stream in a validated way. This method
+ * ensures valid input, or requires the user to keep entering until input is
+ * valid
+ *
+ * OUTPUT: a number entered by the user into the input stream.
+ */
+int getInteger()
+{
+    int numberIn;
+    cin >> numberIn;
+
+    while(cin.fail())
+    {
+        cin.clear();
+        cin.ignore(101,'\n');
+        cerr << "Please enter a whole number as input (EX 100 or 125)" << endl;
+        cout << "Please renter your number: ";
+        cin >> numberIn;
+    }
+
+    cin.ignore(101,'\n');
+
+    return numberIn;
+}
+
 void menu(songList &list)
 {
     int option = 0;
     int likesToRemove;
+    int totalMatches = 0;
     char * artistName = nullptr;
     song newSong;
 
@@ -65,20 +92,7 @@ void menu(songList &list)
              << "\t5. Quit\n"
              << endl << endl;
         cout << "Enter an option: ";
-        cin >> option;
-        while(cin.fail())
-        {
-            cin.clear();
-            cin.ignore(101,'\n');
-
-            cout << "ERR please enter the number of your menu choice: "
-                 << "(EX 1"
-                    " to print the list) "
-                 << endl;
-            cout << "Please enter a menu choice: ";
-            cin >> option;
-        }
-        cin.ignore(101,'\n');
+        option = getInteger();
 
         switch(option)
         {
@@ -88,7 +102,11 @@ void menu(songList &list)
             case 2:
                 cout << "Enter an artist name to display: ";
                 getInput(artistName);
-                list.printByArtist(artistName);
+                if(list.printByArtist(artistName))
+                {
+                    cout << "There are no songs by artist " << artistName <<
+                    " in the list" << endl;
+                }
                 delete []artistName;
                 break;
             case 3:
@@ -97,23 +115,23 @@ void menu(songList &list)
                 break;
             case 4:
                cout << "Enter the number of likes you'd like to delete: ";
-               cin >> likesToRemove;
-
-               if(cin.fail())
+               likesToRemove = getInteger();
+               totalMatches = list.getFrequency(likesToRemove);
+                if(list.removeByLikes(likesToRemove))
                {
-                   cin.clear();
-                   cin.ignore(101,'\n');
-                   cerr << "Please enter a number of likes (EX 100 or 225)"
-                   << endl;
-                   cout << "Please reinput the number of likes: ";
-                   cin >> likesToRemove;
+                   cout << "[ " << totalMatches << " ] songs removed from "
+                                                   "the list " << endl;
                }
-               cin.ignore(101,'\n');
-               list.removeByLikes(likesToRemove);
+                else
+                {
+                    cout << "There were no songs with less than " <<
+                    likesToRemove << " in the list" << endl;
+                }
             case 5:
                 break;
             default:
-                cout << "invalid input, please try again " << endl;
+                cerr << option << " is an invalid menu choice" << endl;
+                cout << endl;
         }
     }
 
@@ -136,29 +154,9 @@ song getSongInfo()
     cout << "Enter the title for this song: ";
     getInput(songTitle);
     cout << "Enter the number of likes for this song: ";
-    cin >> likes;
-    while(cin.fail())
-    {
-        cin.clear();
-        cin.ignore(101,'\n');
-        cout << "ERR invalid input please enter a number of likes (EX: 100) "
-             << endl;
-        cout << "Enter number of likes for this song: ";
-        cin >> likes;
-    }
-    cin.ignore(101,'\n');
+    likes = getInteger();
     cout << "Please enter the length of this song: ";
-    cin >> length;
-    while(cin.fail())
-    {
-        cin.clear();
-        cin.ignore(101,'\n');
-        cout << "Please enter length as a number for this song (EX:4.50) "
-             << endl;
-        cout << "Enter length of this song: ";
-        cin >> length;
-    }
-    cin.ignore(101,'\n');
+    length = getInteger();
     newSong.setArtist(artistName);
     newSong.setTitle(songTitle);
     newSong.setNumberOfLikes(likes);
@@ -172,43 +170,9 @@ song getSongInfo()
 }
 
 
-void loadFromFile(const char * filename, songList &list)
+void endApplication()
 {
-    fstream file(filename);
-    song currentSong;
-    const int MAX_CHAR = 101;
-    char artistName[MAX_CHAR];
-    char title[MAX_CHAR];
-    int likes;
-    int length;
-
-
-    if(!file)
-    {
-        cerr << "Failed to open " << filename << " for reading" << endl;
-        return; // allow program to continue without the file data.
-    }
-
-    file.get(artistName, MAX_CHAR, ';');
-
-    while(!file.eof())
-    {
-        file.get();
-        file.get(title, MAX_CHAR, ';');
-        file.get();
-        file >> likes;
-        file.ignore(MAX_CHAR, ';');
-        file >> length;
-        file.ignore(MAX_CHAR, '\n');
-
-        song tempSong(artistName,title,length,likes);
-        cout << tempSong;
-        list.insert(tempSong);
-        file.get(artistName, MAX_CHAR, ';');
-    }
-
-    file.close();
-
+    cout <<
 }
 
 int main()
@@ -216,7 +180,7 @@ int main()
     cout << "Welcome to the song list database. " << endl;
     songList list;
     char filename[] = "roster.txt";
-    loadFromFile(filename,list);
+    list.loadFromFile(filename);
     menu(list);
     return 0;
 

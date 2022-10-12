@@ -171,7 +171,7 @@ void songList::printList(const songList &list)
  * print songs in the list for a given artist sorted by likes.
  * INPUT: artName a pointer containing the artist name we wish to print
  */
-void songList::printByArtist(const char * artName)
+bool songList::printByArtist(const char * artName)
 {
     songList sortedList;
     song tempSong;
@@ -199,6 +199,8 @@ void songList::printByArtist(const char * artName)
 
     if(currentArtist)
         delete []currentArtist;
+
+    return (sortedList.index == nullptr);
 
 }
 
@@ -262,27 +264,31 @@ void songList::insertSorted(const song & aSong)
  */
 bool songList::removeByLikes(const int target)
 {
-    bool success = false;
     node * curr = index;
+    node * next = nullptr;
     int counter = 0;
-    if(target < 0)
-        return success;
+    bool success;
 
-    while(curr && curr->next->data->getLikes() > target)
-    {
-        curr = curr->next;
-    }
-
-    if(curr)
-    {
-        remove(curr);
-    }
-    else
-    {
+    if(!index)
         return false;
+
+
+    while(curr)
+    {
+        if(curr->data->getLikes() < target)
+        {
+            next = curr->next;
+            if(remove(curr))
+                counter++;
+            curr = next;
+        }
+        else
+        {
+            curr = curr->next;
+        }
     }
 
-    return success;
+    return (counter > 0);
 }
 
 /*
@@ -290,46 +296,99 @@ bool songList::removeByLikes(const int target)
  * INPUT toRemove a reference to the node pointer we wish to delete
  * returns true if deleted false if else.
  */
-bool songList::remove(node *& toRemove)
+bool songList::remove(node * toRemove)
 {
-    node * curr = index;
-    if(!isEmpty())
-    {
-        while(curr && curr != toRemove)
-        {
-            curr = curr->next;
-        }
-
-        if(curr == index)
-        {
-            index = toRemove->next;
-        }
-
-        if(toRemove->next)
-        {
-            toRemove->next->prev = toRemove->prev;
-        }
-
-        if(toRemove->prev)
-        {
-            toRemove->prev->next = toRemove->next;
-        }
-
-        delete toRemove;
-        return true;
-
-    }
-    else
-    {
+    if(isEmpty() || !toRemove)
         return false;
+
+    if(index == toRemove)
+    {
+        index = toRemove->next;
     }
-};
+
+    // removing a node in the middle of the list.
+    if(toRemove->next)
+    {
+        toRemove->next->prev = toRemove->prev;
+    }
+
+    // removing a node at the end of our list.
+    if(toRemove->prev)
+    {
+        toRemove->prev->next = toRemove->next;
+    }
+
+    delete toRemove;
+
+    return true;
+}
+
+
+int songList::getFrequency(const int target)
+{
+    int total = 0;
+    node * curr = index;
+    if(!index || target < 0)
+    {
+        return total;
+    }
+
+    while(curr)
+    {
+        if(curr->data->getLikes() < target)
+        {
+            total++;
+        }
+        curr = curr->next;
+    }
+
+    return total;
+}
+
+void songList::loadFromFile(const char * filename)
+{
+    fstream file(filename);
+    song currentSong;
+    const int MAX_CHAR = 101;
+    char artistName[MAX_CHAR];
+    char title[MAX_CHAR];
+    int likes;
+    int length;
+
+
+    if(!file)
+    {
+        cerr << "Failed to open " << filename << " for reading" << endl;
+        return; // allow program to continue without the file data.
+    }
+
+    file.get(artistName, MAX_CHAR, ';');
+
+    while(!file.eof())
+    {
+        file.get();
+        file.get(title, MAX_CHAR, ';');
+        file.get();
+        file >> likes;
+        file.ignore(MAX_CHAR, ';');
+        file >> length;
+        file.ignore(MAX_CHAR, '\n');
+        song tempSong(artistName,title,length,likes);
+        insertSorted(tempSong);
+        cout << tempSong;
+        file.get(artistName, MAX_CHAR, ';');
+    }
+
+    file.close();
+
+}
 
 /*
  * overloaded assignment operator
  */
 songList & songList::operator=(const songList &aList)
 {
+    node * sourceNext = nullptr;
     if(this == &aList)
         return *this;
     // destroy this list, if it already has data.
@@ -344,7 +403,7 @@ songList & songList::operator=(const songList &aList)
 
     node * newNode = new node(*aList.index->data);
     index = tail = newNode;
-    node * sourceNext = sourceNext->next; // this needs to be changed.
+    sourceNext = sourceNext->next; // this needs to be changed.
     node * newList = index;
 
     while(sourceNext)
