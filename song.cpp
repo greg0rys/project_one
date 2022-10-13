@@ -194,8 +194,9 @@ ostream &operator<<(ostream &out, const song &aSong)
 {
     unsigned int mins = (aSong.length / 60);
     unsigned int seconds = (aSong.length % 60);
-    out << aSong.artistName << " " << aSong.title << " " << mins << "m "
-        << seconds << "s " << aSong.numOfLikes << endl;
+    out << "Artist: " << aSong.artistName << " Title: " << aSong.title
+        << " Duration: " << mins << "m " << seconds << "s Likes: "
+        << aSong.numOfLikes << endl;
 
     return out;
 }

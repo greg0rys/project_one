@@ -89,6 +89,7 @@ void menu(songList &list)
     while(option != 5)
     {
 
+        cout << endl;
         cout << "Menu: \n"
              << "\t1. Print List \n"
              << "\t2. Print Songs By an Artist \n"
@@ -123,7 +124,7 @@ void menu(songList &list)
                 break;
             case 3:
                 newSong = getSongInfo();
-                list.insertSorted(newSong);
+                list.insert(newSong);
                 break;
             case 4:
                cout << "Enter the number of likes you'd like to delete: ";
@@ -183,14 +184,6 @@ song getSongInfo()
 
 
 
-void endApplication()
-{
-    cout << "End app";
-
-}
-
-
-
 int main()
 {
     cout << "Welcome to the song list database. " << endl << endl;
@@ -209,8 +202,9 @@ int main()
         cout << "Either the file is empty, or there was an error reading the"
                 " file " << filename << endl;
     }
-    menu(list);
 
+    menu(list);
+    cout << "*** [ done ] ***" << endl;
     return 0;
 
 

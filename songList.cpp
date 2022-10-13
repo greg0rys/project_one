@@ -40,26 +40,7 @@ void songList::destroy()
     size = 0;
 }
 
-/*
- * insert a new song into the list
- * INPUT aSong a reference to a song object
- */
-bool songList::insert(const song &aSong)
-{
-    node * curr = index;
-    node * newNode = new node(aSong);
 
-    if(!index)
-    {
-        index = newNode;
-        tail = newNode;
-    }
-    else
-    {
-        delete newNode;
-        append(aSong);
-    }
-}
 
 /*
  * append a new song to the end of the list
@@ -85,74 +66,6 @@ void songList::append(const song &aSong)
 
 }
 
-/*
- * Get a given artist node from the list
- * INPUT: artName a pointer containing the artist name
- * OUTPUT: node * a pointer to the located node.
- */
-songList::node* songList::getArtistAt(const char * artName)
-{
-    node * curr = index;
-    char * artistName = nullptr;
-    while(curr)
-    {
-        curr->data->getArtist(artistName);
-        if(strcmp(artistName,artName) == 0)
-        {
-            break;
-        }
-        curr = curr->next;
-    }
-
-    return curr;
-}
-
-/*
- * Get a given song node from the list based on song title
- * INPUT: songName a pointer containing the songs name
- * OUTPUT: node * a pointer to the located node.
- */
-songList::node* songList::getSongAt(const char * songName)
-{
-    node * curr = index;
-    char * currentSongName = nullptr;
-
-    while(curr)
-    {
-        if(currentSongName)
-            delete []currentSongName;
-
-        curr->data->getTitle(currentSongName);
-        if(strcmp(songName, currentSongName) == 0)
-        {
-            break;
-        }
-        curr = curr->next;
-    }
-
-    return curr;
-}
-
-/*
- * @param likes the number of likes the user would like to change too.
- * @param name the name of the song the user wants to edit.
- * @return success true if likes were updated false if else.
- */
-bool songList::editLikes(int likes, const char * name)
-{
-    node * nodeToEdit = getSongAt(name);
-    song songToEdit;
-    bool success = false;
-
-    if(nodeToEdit)
-    {
-        songToEdit = *(nodeToEdit->data);
-        songToEdit.setNumberOfLikes(likes);
-        success = true;
-    }
-
-    return success;
-}
 
 /*
  * print all of the songs in our list (unsorted)
@@ -160,11 +73,10 @@ bool songList::editLikes(int likes, const char * name)
  */
 void songList::printList(const songList &list)
 {
-
-    if(isEmpty())
-        cout << "The list is empty!" << endl;
-    else
-        cout << list;
+    if(!isEmpty())
+    {
+        cout << list << endl;
+    }
 }
 
 /*
@@ -176,6 +88,7 @@ bool songList::printByArtist(const char * artName)
     songList sortedList;
     song tempSong;
     node * curr = index;
+    int totalFound = 0;
     char * currentArtist = nullptr;
 
     while(curr)
@@ -189,13 +102,15 @@ bool songList::printByArtist(const char * artName)
         if(strcmp(currentArtist, artName) == 0)
         {
 
-                tempSong = *(curr->data);
-                sortedList.insertSorted(tempSong);
+            tempSong = *(curr->data);
+            sortedList.insert(tempSong);
+            totalFound++;
         }
 
         curr = curr->next;
     }
 
+    cout << "[ " << totalFound << " ] songs found by " << artName << endl;
     cout << sortedList << endl;
 
     if(currentArtist)
@@ -215,10 +130,10 @@ bool songList::isEmpty()
 }
 
 /*
- * insert a new song to the list sorted by likes
+ * insert a new song to the list sorted descending by total number of likes.
  * INPUT aSong a reference to a song object
  */
-void songList::insertSorted(const song & aSong)
+void songList::insert(const song &aSong)
 {
 
     node * newNode = new node(aSong);
@@ -227,12 +142,14 @@ void songList::insertSorted(const song & aSong)
     if(!index)
     {
         index = newNode;
+        size = 1;
     }
     else if(index->data->getLikes() <= aSong.getLikes())
     {
         newNode->next = index;
         newNode->next->prev = newNode;
         index = newNode;
+        size++;
     }
     else
     {
@@ -249,6 +166,7 @@ void songList::insertSorted(const song & aSong)
 
         curr->next = newNode;
         newNode->prev = curr;
+        size++;
     }
 
 }
@@ -381,7 +299,7 @@ int songList::loadFromFile(const char * filename)
         file >> length;
         file.ignore(MAX_CHAR, '\n');
         song tempSong(artistName,title,length,likes);
-        insertSorted(tempSong);
+        insert(tempSong);
         totalLoaded++;
         file.get(artistName, MAX_CHAR, ';');
     }
@@ -391,6 +309,11 @@ int songList::loadFromFile(const char * filename)
 
 }
 
+
+int songList::getSize() const
+{
+    return size;
+}
 
 
 /*
