@@ -82,11 +82,13 @@ void menu(songList &list)
 {
     int option = 0;
     int likesToRemove;
+    int likesToEdit;
     int totalMatches = 0;
     char * artistName = nullptr;
+    char * songTitle = nullptr;
     song newSong;
 
-    while(option != 5)
+    while(option != 6)
     {
 
         cout << endl;
@@ -95,7 +97,8 @@ void menu(songList &list)
              << "\t2. Print Songs By an Artist \n"
              << "\t3. Add a new song to the list \n"
              << "\t4. Remove songs with less than a given number of likes \n"
-             << "\t5. Quit\n"
+             << "\t5. Edit the number of likes for a song\n"
+             << "\t6. Quit the application\n"
              << endl << endl;
         cout << "Enter an option: ";
         option = getInteger();
@@ -141,6 +144,26 @@ void menu(songList &list)
                     likesToRemove << " likes in the list" << endl;
                 }
             case 5:
+                cout << "Enter the title of the song you wish to edit: ";
+                getInput(songTitle);
+                if(list.findSongTitle(songTitle))
+                {
+                    cout << "No songs with the title " << songTitle
+                         << " were found in the list " << endl;
+                }
+                else
+                {
+                    cout << "Enter the number of likes you'd like to set the "
+                            "song to (EX 350): ";
+                    likesToEdit = getInteger();
+
+                    if(list.editLikes(likesToEdit, songTitle))
+                    {
+                        cout << "Changed " << songTitle << " likes to: "
+                             << likesToEdit << endl;
+                    }
+                }
+                delete []songTitle;
                 break;
             default:
                 cerr << option << " is an invalid menu choice" << endl;

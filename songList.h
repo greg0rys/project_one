@@ -34,6 +34,7 @@ private:
 
     void destroy(); // destroy the pointers in our list
 
+    node * getSongAt(const char *);
 
     node * index;
     node * tail;
@@ -49,8 +50,10 @@ public:
     bool isEmpty(); // check if this list is empty
     void insert(const song &); // insert into a list sorted
     bool removeByLikes(const int);
+    bool editLikes(int, const char *);
     bool remove(node *);
     int getFrequency(const int);
+    bool findSongTitle(const char *);
     int getSize() const;
     int loadFromFile(const char *); // load song data from a file.
 

@@ -141,16 +141,15 @@ void song::getArtist(char *artist) const
  */
 void song::getTitle(char *songTitle) const
 {
-    if (!songTitle) {
-        songTitle = new char[strlen(title) + 1];
-    } else {
-        delete[] songTitle;
-        songTitle = new char[strlen(title) + 1];
-    }
 
     strcpy(songTitle, title);
 }
 
+
+int song::getTitleLength() const
+{
+    return static_cast<int>(strlen(title));
+}
 
 /*
  * this function is called when a member of this class is destroyed, it will

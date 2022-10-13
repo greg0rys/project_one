@@ -21,6 +21,7 @@ public:
     void setNumberOfLikes(int);
     void getArtist(char *) const;
     void getTitle(char *) const;
+    int getTitleLength() const;
     int getLength() const;
     int getLikes() const;
     int getArtistNameLength() const;

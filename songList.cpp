@@ -40,8 +40,76 @@ void songList::destroy()
     size = 0;
 }
 
+songList::node * songList::getSongAt(const char *songTitle)
+{
+    node * curr = index;
+    node * foundNode = nullptr;
+    char * currentTitle = nullptr;
+    if(!index)
+    {
+        return nullptr;
+    }
+
+    while(curr)
+    {
+        if(currentTitle)
+        {
+            delete []currentTitle;
+        }
+        currentTitle = new char[curr->data->getTitleLength() + 1];
+        curr->data->getTitle(currentTitle);
+        if(strcmp(currentTitle, songTitle) == 0)
+        {
+            foundNode = curr;
+        }
+
+        curr = curr->next;
 
 
+    }
+
+    if(currentTitle)
+    {
+        delete []currentTitle;
+    }
+
+    return foundNode;
+}
+
+
+bool songList::editLikes(int newLikes, const char * songTitle)
+{
+    node * nodeToEdit = getSongAt(songTitle);
+    node * curr = index;
+    songList updatedList;
+    if(!nodeToEdit)
+    {
+        return false;
+    }
+    else
+    {
+        // update the nodes likes
+        nodeToEdit->data->setNumberOfLikes(newLikes);
+        // resort the current list so it displays in order.
+        while(curr)
+        {
+            updatedList.insert(*(curr->data));
+            curr = curr->next;
+        }
+
+        // set this list to be the newly sorted list.
+        *this = updatedList;
+        return true;
+    }
+}
+
+
+bool songList::findSongTitle(const char * songTitle)
+{
+    node * searchNode = getSongAt(songTitle);
+
+    return (searchNode == nullptr);
+}
 /*
  * append a new song to the end of the list
  * INPUT: aSong a reference to a song object
