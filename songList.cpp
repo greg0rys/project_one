@@ -162,6 +162,19 @@ void songList::append(const song &aSong)
 
 }
 
+/*
+ * recursively print the lists content
+ * INPUT: head the current head of the list.
+ */
+void songList::print(songList::node * head)
+{
+    if(!head)
+    {
+        return;
+    }
+    cout << *head->data << endl;
+    print(head->next);
+}
 
 /*
  * print all of the songs in our list (unsorted)
@@ -171,7 +184,7 @@ void songList::printList(const songList &list)
 {
     if(!isEmpty())
     {
-        cout << list << endl;
+       print(list.index);
     }
 }
 
@@ -207,7 +220,7 @@ bool songList::printByArtist(const char * artName)
     }
 
     cout << "[ " << totalFound << " ] songs found by " << artName << endl;
-    cout << sortedList << endl;
+    printList(sortedList);
 
     if(currentArtist)
         delete []currentArtist;

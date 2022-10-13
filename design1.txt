@@ -14,7 +14,7 @@ For our data structure of doubly linked nodes we only need to be worried about t
 To interact with the Data Structure the ADT will need the following functions:
   1. insert a function to insert a song into the list in a sorted way.
   2. append a function to insert a song into the end of our list
-  3. printList a function to print all of the data in our list. This function will acheive this by recursivly traversing the list and printint the data for each song
+  3. printList a function to print all of the data in our list. This function will achieve this by recursively traversing the list and printint the data for each song
   4. printListByArtist a function to print all songs by a given artist in our list.
   5. isEmpty a function to check if our list is empty
   6. remove a function to remove a given node from our list
@@ -30,22 +30,22 @@ To interact with the Data Structure the ADT will need the following functions:
   1. insert will return a boolean true or false. True if it was able to insert the node, false if else. This method will always return true because we allow duplicate entries.
   2. append will return a boolean true or false. True if it was able to add to the end of the list false if else.
   3. printList and printListByArtist will depend on the boolean flags from isEmpty and getSongAt
-		printList will not procede if isEmpty returns true, and printByArtist will not procede if findSongTitle returns true.
+		printList will not proceed if isEmpty returns true, and printByArtist will not proceed if findSongTitle returns true.
   4. isEmpty will return a boolean value true if the list is empty false if else.
   5.remove will return a boolean flag true if it was able to remove the node false if else.
   6. removeByLikes will return a boolean flag true if there was any songs removed false if no songs were removed.
   7. editLikes will return a boolean flag, true if a song had its likes edited false if else.
   8. findSongTitle will return a boolean flag true if the song title is in our list false if else.
   9. getFrequency will return an integer 0 if no songs have less than m likes > 0 if there are songs with m likes in the list
-  10. getSongAt will return a boolean flag true if the song title is in the list false if else.
+  10. getSongAt will return a Boolean flag true if the song title is in the list false if else.
   11. getSize will return a number 0 if the list is empty >0 if list has data
   12. loadFromFile will return a number 0 if no songs were loaded from the file >0 if songs were loaded.
   
-  Each of these functions is implemented to gaurd the data structure behind a wall these functions allow the client
+  Each of these functions is implemented to guard the data structure behind a wall these functions allow the client
   to request data out of the structure without having direct access to the entire structure
-	1. insert gaurds our data structure by only taking in the new song we want to add from the client 
+	1. insert guards our data structure by only taking in the new song we want to add from the client 
 	    it then manages all the pointers in the list by linking the new node into the list based on its number of likes.
-	2. append gaurds our data structure by again only taking a song object from the client
+	2. append guards our data structure by again only taking a song object from the client
 		it then links the new node into the end of the list. 
 	3. printList gaurds the data structure by traversing the list for the client and printing 
 	   each nodes data without letting the client access the node or telling where it is

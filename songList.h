@@ -42,6 +42,7 @@ private:
     void destroy(); // destroy the pointers in our list
 
     node * getSongAt(const char *); // get a pointer to a node by song title
+    void print(node *); // recursive print
 
     node * index; // the list head
     node * tail; // the end of the list

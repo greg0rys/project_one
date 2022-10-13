@@ -50,6 +50,26 @@ song::~song()
 }
 
 
+
+/*
+ * this function is called when a member of this class is destroyed, it will
+ * deallocate the dynamic char arrays for artist name and the songs title.
+ */
+void song::destroy()
+{
+    if (this->artistName) {
+        delete []artistName;
+    }
+    if (this->title) {
+        delete []title;
+    }
+    this->artistName = nullptr;
+    this->title = nullptr;
+
+}
+
+
+
 /*
  * overloaded assignment operator to avoid shallow copies.
  */
@@ -156,22 +176,6 @@ int song::getTitleLength() const
     return static_cast<int>(strlen(title));
 }
 
-/*
- * this function is called when a member of this class is destroyed, it will
- * deallocate the dynamic char arrays for artist name and the songs title.
- */
-void song::destroy()
-{
-    if (this->artistName) {
-        delete []artistName;
-    }
-    if (this->title) {
-        delete []title;
-    }
-    this->artistName = nullptr;
-    this->title = nullptr;
-
-}
 
 
 /*
