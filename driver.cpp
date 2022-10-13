@@ -1,3 +1,20 @@
+/*
+ * Author: Greg Shenefelt
+ * Date: 10/10/2022
+ * Class: CS 260 Data Structures
+ * Program #1
+ * file name: driver.cpp the implementation file for driver.h
+ * This module is responsible for allowing the client to interact with the
+ * ADT list
+ * This program is an interactive menu style program that allows you to
+ * manage a list of songs.
+ * This allows us to display all songs in the list sorted by likes, allows
+ * us to display all songs in the list by a given artist sorted by likes,
+ * allows us to add a new song to our list, allows us to update the number
+ * of likes of a given song, and allows us to remove songs that have less
+ * than a given number of likes.
+ */
+
 #include "driver.h"
 #include "songList.h"
 #include "song.h"
@@ -9,12 +26,13 @@
  * from the user
  */
 void getInput(char *& chars) {
-    char *input = nullptr;
-    char *temp = nullptr;
-    int wordSize = 0;
+    char *input = nullptr; // store the input from input stream
+    char *temp = nullptr; // store a temp copy of the input each time input
+    // grows
+    int wordSize = 0; // the size of the word we got from input
 
     while (cin.good() && cin.peek() != EOF) {
-        char letter = cin.get();
+        char letter = cin.get(); // grabs the current character in the input
 
         if (letter == '\n') {
             break;
@@ -56,7 +74,7 @@ void getInput(char *& chars) {
  */
 int getInteger()
 {
-    int numberIn;
+    int numberIn; // store the number entered by the user.
     cin >> numberIn;
 
     while(cin.fail())
@@ -80,13 +98,13 @@ int getInteger()
  */
 void menu(songList &list)
 {
-    int option = 0;
-    int likesToRemove;
-    int likesToEdit;
-    int totalMatches = 0;
-    char * artistName = nullptr;
-    char * songTitle = nullptr;
-    song newSong;
+    int option = 0; // store the current menu choice
+    int likesToRemove; // store the number of likes we wish to remove
+    int likesToEdit; // the number of likes to update a song too.
+    int totalMatches = 0; // the number of songs that match a given search
+    char * artistName = nullptr; // the name of an artist
+    char * songTitle = nullptr; // the title of a song
+    song newSong; // a new song that will be added to our list.
 
     while(option != 6)
     {
@@ -143,6 +161,7 @@ void menu(songList &list)
                     cout << "There were no songs with less than " <<
                     likesToRemove << " likes in the list" << endl;
                 }
+                break;
             case 5:
                 cout << "Enter the title of the song you wish to edit: ";
                 getInput(songTitle);
@@ -165,6 +184,8 @@ void menu(songList &list)
                 }
                 delete []songTitle;
                 break;
+            case 6:
+                break;
             default:
                 cerr << option << " is an invalid menu choice" << endl;
                 cout << endl;
@@ -180,11 +201,11 @@ void menu(songList &list)
  * */
 song getSongInfo()
 {
-    song newSong;
-    char * artistName = nullptr;
-    char * songTitle = nullptr;
-    int  likes;
-    int  length;
+    song newSong; // the new song we will add
+    char * artistName = nullptr; // the artist of the new song
+    char * songTitle = nullptr; // the title of the new song
+    int  likes; // the number of likes for the new song
+    int  length; // the length of the new song
     cout << "Enter the artist of this songs name: ";
     getInput(artistName);
     cout << "Enter the title for this song: ";
@@ -210,9 +231,10 @@ song getSongInfo()
 int main()
 {
     cout << "Welcome to the song list database. " << endl << endl;
-    songList list;
-    char filename[] = "roster.txt";
-    int totalLoaded = list.loadFromFile(filename);
+    songList list; // the list of songs
+    char filename[] = "roster.txt"; // the name of the file to load.
+    int totalLoaded = list.loadFromFile(filename); // the number of songs
+    // loaded from the file.
 
     if(totalLoaded > 0)
     {

@@ -1,3 +1,11 @@
+/*
+ * filename: songList.cpp
+ * the implementation file for songList.h it implements the methods of the
+ * ADT list allowing the client to perform operations on the list and its
+ * contents.
+ */
+
+
 #include "songList.h"
 
 /*
@@ -28,7 +36,7 @@ songList::~songList()
  */
 void songList::destroy()
 {
-    node * curr = index;
+    node * curr = index; // the current head of our list.
     while(curr)
     {
         index = curr->next;
@@ -48,9 +56,9 @@ void songList::destroy()
  */
 songList::node * songList::getSongAt(const char *songTitle)
 {
-    node * curr = index;
-    node * foundNode = nullptr;
-    char * currentTitle = nullptr;
+    node * curr = index; // the current list head
+    node * foundNode = nullptr; // the node we are searching for
+    char * currentTitle = nullptr; // the current title of a song
     if(!index)
     {
         return nullptr;
@@ -91,9 +99,9 @@ songList::node * songList::getSongAt(const char *songTitle)
  */
 bool songList::editLikes(int newLikes, const char * songTitle)
 {
-    node * nodeToEdit = getSongAt(songTitle);
-    node * curr = index;
-    songList updatedList;
+    node * nodeToEdit = getSongAt(songTitle); // the node to update
+    node * curr = index; // the current list head
+    songList updatedList; // the newly updated list, resorted.
     if(!nodeToEdit)
     {
         return false;
@@ -123,7 +131,7 @@ bool songList::editLikes(int newLikes, const char * songTitle)
  */
 bool songList::findSongTitle(const char * songTitle)
 {
-    node * searchNode = getSongAt(songTitle);
+    node * searchNode = getSongAt(songTitle); // the song we are searching for
 
     return (searchNode == nullptr);
 }
@@ -136,7 +144,7 @@ bool songList::findSongTitle(const char * songTitle)
  */
 void songList::append(const song &aSong)
 {
-    node * newNode = new node(aSong);
+    node * newNode = new node(aSong); // the new node to be added to the list.
 
 
     if(!index)
@@ -173,11 +181,11 @@ void songList::printList(const songList &list)
  */
 bool songList::printByArtist(const char * artName)
 {
-    songList sortedList;
-    song tempSong;
-    node * curr = index;
-    int totalFound = 0;
-    char * currentArtist = nullptr;
+    songList sortedList; // a tempory list based on the artist name.
+    song tempSong; // the song to add to our list
+    node * curr = index; // the current list head
+    int totalFound = 0; // the total number of found matches
+    char * currentArtist = nullptr; // the current artist name
 
     while(curr)
     {
@@ -224,14 +232,15 @@ bool songList::isEmpty()
 void songList::insert(const song &aSong)
 {
 
-    node * newNode = new node(aSong);
-    node * curr = index;
+    node * newNode = new node(aSong); // the new node to add to our list
+    node * curr = index; // the current list head.
 
     if(!index)
     {
         index = newNode;
         size = 1;
     }
+    // insert the node at the front of the list
     else if(index->data->getLikes() <= aSong.getLikes())
     {
         newNode->next = index;
@@ -267,9 +276,9 @@ void songList::insert(const song &aSong)
  */
 bool songList::removeByLikes(const int target)
 {
-    node * curr = index;
-    node * next = nullptr;
-    int counter = 0;
+    node * curr = index; // current list head
+    node * next = nullptr; // the current nodes next node
+    int counter = 0; // the total number of nodes removed.
 
     if(!index)
         return false;
@@ -300,9 +309,11 @@ bool songList::removeByLikes(const int target)
  */
 bool songList::remove(node * toRemove)
 {
+    // the list is empty
     if(isEmpty() || !toRemove)
         return false;
 
+    // removing the first node in the list.
     if(index == toRemove)
     {
         index = toRemove->next;
@@ -333,8 +344,8 @@ bool songList::remove(node * toRemove)
  */
 int songList::getFrequency(const int target)
 {
-    int total = 0;
-    node * curr = index;
+    int total = 0; // total number of matching nodes
+    node * curr = index; // the current list head
     if(!index || target < 0)
     {
         return total;
@@ -359,14 +370,14 @@ int songList::getFrequency(const int target)
  */
 int songList::loadFromFile(const char * filename)
 {
-    fstream file(filename);
-    song currentSong;
-    const int MAX_CHAR = 101;
-    char artistName[MAX_CHAR];
-    char title[MAX_CHAR];
-    int likes;
-    int length;
-    int totalLoaded = 0;
+    fstream file(filename); // the file to open
+    song currentSong; // the current song in the file
+    const int MAX_CHAR = 101; // the max number of chars for a name or title
+    char artistName[MAX_CHAR]; // songs artist name
+    char title[MAX_CHAR]; // songs title
+    int likes; // songs number of likes
+    int length; // songs length
+    int totalLoaded = 0; // total number of songs loaded
 
 
     if(!file)
@@ -379,7 +390,7 @@ int songList::loadFromFile(const char * filename)
 
     while(!file.eof())
     {
-        file.get();
+        file.get(); // throw away the delim
         file.get(title, MAX_CHAR, ';');
         file.get();
         file >> likes;
@@ -398,6 +409,10 @@ int songList::loadFromFile(const char * filename)
 }
 
 
+/*
+ * returns the total size of the list
+ * OUTPUT: the total number of items in the list.
+ */
 int songList::getSize() const
 {
     return size;
@@ -422,14 +437,15 @@ songList & songList::operator=(const songList &aList)
        return *this;
    }
 
-   node * newNode = new node(*(aList.index->data));
+   node * newNode = new node(*(aList.index->data)); // the new node
    index = tail = newNode;
-   node * nextSource = aList.index->next;
-   node * nextDest = index;
+   node * nextSource = aList.index->next; // the next item in the source list
+   node * nextDest = index; // the next destination of the current list
 
    while(nextSource)
    {
-       newNode = new node(*(nextSource->data));
+       newNode = new node(*(nextSource->data)); // the next node in the
+       // source list
        nextDest->next = newNode;
        newNode->prev = nextDest;
        nextSource = nextSource->next;
@@ -448,7 +464,7 @@ songList & songList::operator=(const songList &aList)
  ostream& operator<<(ostream & out, const songList & aList)
 {
 
-    songList::node * curr = aList.index;
+    songList::node * curr = aList.index; // the head of the parameter list.
     while(curr)
     {
         out << *(curr->data);

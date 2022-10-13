@@ -1,3 +1,8 @@
+/*
+ * filename: song.cpp
+ * the implementation file for song.h. This module defines all the functions
+ * that a song must have.
+ */
 #include "song.h"
 
 
@@ -191,8 +196,9 @@ int song::getLikes() const
  */
 ostream &operator<<(ostream &out, const song &aSong)
 {
-    unsigned int mins = (aSong.length / 60);
-    unsigned int seconds = (aSong.length % 60);
+    unsigned int mins = (aSong.length / 60); // the total # of mins a song is
+    unsigned int seconds = (aSong.length % 60); // the total # of seconds a
+    // song is
     out << "Artist: " << aSong.artistName << " Title: " << aSong.title
         << " Duration: " << mins << "m " << seconds << "s Likes: "
         << aSong.numOfLikes << endl;

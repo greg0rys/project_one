@@ -1,0 +1,21 @@
+Greg Shenefelt 
+10/10/2022
+
+For this programs efficiency I will explore how efficent the doubly linked data structure 
+performed for this project.
+For this project where we simply had a list of nodes linked together the doubly linked list
+performs well. I felt this was most efficent as it allows us quick constant time access to the 
+first node in the list, and the last node in the list. This allows for quick edits to the front or the end
+of the structure. 
+
+While this was a great way to structure the list a singly linked list would have been a better choice
+due to the fact that we insert nodes sorted based on the current nodes values we are never 
+truly using the previous nodes value as the deciding factor. Nor does this list have any operations that depend on the previous nodes value. So by only using a single link we free up 
+the amount of memory we are using as there is really no need to create a previous pointer in the structure, while also reducing the complexity that arises from managing two pointers per node. 
+
+For this data structure the most efficent thing for me is its ability to check the value of 3 nodes at any given time. During any operation we have the ability to check the information for the current node in the list while also having direct access to the data in the node that comes before it and the node that comes after. It was also efficent at maintaing the data in a sorted view. It allowed for me to keep the data in descending order of likes quickly and easily by having access to the data of the node its currently representing. 
+
+The most inefficent thing about this data structure is the way I implemented the boolean flags. For example the findSongTitle method gets its boolean value by calling getSongAt causing a traversal only used to return true or false. When truthfully we could have just used getSongAt() and checked to see if it returned a null value. Another drawback I implemented was the getFrequencyMethod while this was helpful to let the client know how many songs were found with less than m likes, it uses a traversal to generate its boolean flag. Which might have been unneeded as the client probably shouldn't be aware of the number of matches that are in the list at any given time. 
+The final thing I found to be inefficent was the way editLikes works. It first traverses the list to find the song we wish to update, then it updates the likes for that song. To maintain its order it then traverses the list a second time and creates a temporary list to resort the newly updated song. After the costly second traversal is done, it then sets the current list to become a copy of the new temporary list, causing the overhead of completly destroying the current list and copying the new values in. A better way would to have been to have a find method that finds where the newly updated song should be and then passing that found position to the insert function which then only traverses up to the position and updates the links. This would have prevented the creation and copying of a temporary list. 
+
+Had I had more time to solve this problem I would have really paid attention to how efficent each operation was. For example I would have created a seperate insert function or maybe even called it update which would have taken the updated song and the place it should be inserted it would then traverse to the place it should be inserted and update the links of the items before and after it. Again preventing the creation of a temporary list. I would also try and reduce the number of methods I created by thinking about how a given method can return success or failure of a given operation without depending on some uneeded operation like findSongtitle because getSong at could be checked for a null value. 

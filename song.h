@@ -1,3 +1,10 @@
+/*
+ * filename: song.h
+ * defines the song ADT and the methods that it must have. It also defines
+ * what data a song will have
+ */
+
+
 #pragma once
 
 #include <iostream>
