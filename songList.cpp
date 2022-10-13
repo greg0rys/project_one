@@ -40,6 +40,12 @@ void songList::destroy()
     size = 0;
 }
 
+
+/*
+ * Get a pointer to asong in the list based on its title
+ * INPUT: the title of the song we wish to search for
+ * OUTPUT: a pointer to the song or nullptr if not found.
+ */
 songList::node * songList::getSongAt(const char *songTitle)
 {
     node * curr = index;
@@ -77,6 +83,12 @@ songList::node * songList::getSongAt(const char *songTitle)
 }
 
 
+/*
+ * Edit the likes for a song in the list.
+ * INPUT: newLikes the likes we want to update the song too - songTitle the
+ * title of the song we want to update
+ * OUTPUT: true if the node was updated and list sorted false if else.
+ */
 bool songList::editLikes(int newLikes, const char * songTitle)
 {
     node * nodeToEdit = getSongAt(songTitle);
@@ -104,12 +116,20 @@ bool songList::editLikes(int newLikes, const char * songTitle)
 }
 
 
+/*
+ * Find a song in our list based on its title
+ * INPUT: songTitle the title of the song we wish to search for
+ * OUTPUT: true if the song was found false if else.
+ */
 bool songList::findSongTitle(const char * songTitle)
 {
     node * searchNode = getSongAt(songTitle);
 
     return (searchNode == nullptr);
 }
+
+
+
 /*
  * append a new song to the end of the list
  * INPUT: aSong a reference to a song object
